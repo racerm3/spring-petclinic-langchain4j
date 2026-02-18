@@ -46,7 +46,7 @@ Here are **some examples** of what you could ask:
 
 ## Choosing the LLM provider
 
-Spring Petclinic currently supports **OpenAI** or **Azure's OpenAI** or **Ollama** (partial support) as the LLM provider.
+Spring Petclinic currently supports **OpenAI** or **Azure's OpenAI** or **Ollama** (partial support) or **Google AI Gemini** as the LLM provider.
 **OpenAI** is the **default**.
 
 Please note that the Spring Petclinic is not fully functional with the `llama3.1` model.
@@ -58,22 +58,29 @@ Spring Petclinic supports both `Maven` and `Gradle` build tools.
 
 #### Maven build
 
-Switching between LLM is done using **Maven profiles**. Three Maven profiles are provided: 
+Switching between LLM is done using **Maven profiles**. Four Maven profiles are provided: 
 1. `openai` (default)
 2. `azure-openai`
 3. `ollama`
+4. `gemini`
 
 By default, thanks to the default `openai` profile, the `langchain4j-open-ai-spring-boot-starter` dependency is enabled.
-You can change it to `langchain4j-azure-open-ai-spring-boot-starter` or `langchain4j-ollama-spring-boot-starter` by activating the corresponding profile.
+You can change it to `langchain4j-azure-open-ai-spring-boot-starter`, `langchain4j-ollama-spring-boot-starter`, or `langchain4j-google-ai-gemini-spring-boot-starter` by activating the corresponding profile.
 ```shell
 ./mvnw package -P azure-openai
 ```
-`in either`pom.xml` or in `build.gradle`, depending on your build tool of choice.
+
+To use Google Gemini:
+```shell
+./mvnw package -P gemini
+```
+
+Configuration is in either `pom.xml` or in `build.gradle`, depending on your build tool of choice.
 
 #### Gradle build
 
-Gradle users will need to comment or uncomment the appropriate `dev.langchain4j:langchain4j-<llm>>-spring-boot-starter` dependency
-in the `build.gradle` file, depending on the LLM provider they want to use.
+Gradle users will need to comment or uncomment the appropriate `dev.langchain4j:langchain4j-<llm>-spring-boot-starter` dependency
+in the `build.gradle` file, depending on the LLM provider they want to use (e.g. `langchain4j-google-ai-gemini-spring-boot-starter` for Gemini).
 
 
 ### 2. Setup your LLM provider
@@ -109,6 +116,16 @@ Run the `llama3.1` model:
 ollama run llama3.1
 ```
 By default, the Ollama REST API starts on `http://localhost:11434`. This URL is used in the `application.properties` file.
+
+#### Google AI Gemini
+
+Get an API key from [Google AI Studio](https://ai.google.dev/gemini-api/docs/api-key).
+
+Export your API key as an environment variable:
+```bash
+export GEMINI_API_KEY="your_api_key_here"
+```
+The application uses the `gemini-2.5-flash` model by default; you can change it in `application.properties`.
 
 
 ## Run Petclinic locally
