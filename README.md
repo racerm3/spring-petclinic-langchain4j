@@ -151,6 +151,47 @@ Or you can run it from Maven directly using the Spring Boot Maven plugin. If you
 
 > NOTE: If you prefer to use Gradle, you can build the app using `./gradlew build` and look for the jar file in `build/libs`.
 
+## REST API Endpoints
+
+The Spring Petclinic LangChain4j application provides several REST API endpoints for interacting with the data and the AI assistant.
+
+### AI Assistant API
+
+*   **POST** `/chat/{user}`: Send a natural language query to the AI assistant for a specific user (identified by a UUID).
+    *   **Sample:**
+        ```bash
+        curl -X POST http://localhost:8080/chat/5a2f082d-72a2-b281-0081-8b9cad0e1f20 \
+             -H "Content-Type: text/plain" \
+             -d "Who are the vets?"
+        ```
+    *   **Response:** A stream of Server-Sent Events (SSE) containing the assistant's response.
+
+### Owners API
+
+*   **GET** `/api/owners`: Retrieve a list of all owners.
+    *   **Sample:** `curl http://localhost:8080/api/owners`
+*   **GET** `/api/owners/{ownerId}`: Retrieve details for a specific owner.
+    *   **Sample:** `curl http://localhost:8080/api/owners/1`
+*   **POST** `/api/owners`: Create a new owner.
+    *   **Sample:**
+        ```bash
+        curl -X POST http://localhost:8080/api/owners \
+             -H "Content-Type: application/json" \
+             -d '{"firstName": "John", "lastName": "Doe", "address": "123 Main St", "city": "Springfield", "telephone": "5551234567"}'
+        ```
+
+### Pets API
+
+*   **GET** `/api/pets`: Retrieve a list of all pets.
+    *   **Sample:** `curl http://localhost:8080/api/pets`
+*   **GET** `/api/pets/types`: Retrieve available pet types (e.g., dog, cat).
+    *   **Sample:** `curl http://localhost:8080/api/pets/types`
+
+### Vets API
+
+*   **GET** `/api/vets`: Retrieve a list of all veterinarians.
+    *   **Sample:** `curl http://localhost:8080/api/vets`
+
 ## Building a Container
 
 There is no `Dockerfile` in this project. You can build a container image (if you have a docker daemon) using the Spring Boot build plugin:
