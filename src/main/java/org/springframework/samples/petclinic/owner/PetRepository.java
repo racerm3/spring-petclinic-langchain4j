@@ -15,6 +15,8 @@
  */
 package org.springframework.samples.petclinic.owner;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
@@ -25,5 +27,15 @@ import org.springframework.data.jpa.repository.JpaRepository;
  * @author Wick Dynex
  */
 public interface PetRepository extends JpaRepository<Pet, Integer> {
+
+	/**
+	 * Retrieve {@link Pet}s from the data store by name, returning all pets whose name
+	 * <i>starts</i> with the given name.
+	 * @param name Value to search for
+	 * @param pageable pageable information
+	 * @return a Collection of matching {@link Pet}s (or an empty Collection if none
+	 * found)
+	 */
+	Page<Pet> findByNameStartingWith(String name, Pageable pageable);
 
 }

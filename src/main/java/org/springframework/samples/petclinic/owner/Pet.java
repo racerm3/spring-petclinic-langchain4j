@@ -60,6 +60,10 @@ public class Pet extends NamedEntity {
 	@OrderBy("date ASC")
 	private final Set<Visit> visits = new LinkedHashSet<>();
 
+	@ManyToOne
+	@JoinColumn(name = "owner_id")
+	private Owner owner;
+
 	public void setBirthDate(LocalDate birthDate) {
 		this.birthDate = birthDate;
 	}
@@ -82,6 +86,14 @@ public class Pet extends NamedEntity {
 
 	public void addVisit(Visit visit) {
 		getVisits().add(visit);
+	}
+
+	public Owner getOwner() {
+		return this.owner;
+	}
+
+	public void setOwner(Owner owner) {
+		this.owner = owner;
 	}
 
 }
