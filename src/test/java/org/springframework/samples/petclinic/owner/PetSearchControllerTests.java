@@ -74,10 +74,22 @@ class PetSearchControllerTests {
 
 	@Test
 	void testProcessFindFormMultipleResults() throws Exception {
+		PetType dog = new PetType();
+		dog.setName("dog");
+
 		Pet pet1 = new Pet();
 		pet1.setId(1);
+		pet1.setType(dog);
+		Owner owner1 = new Owner();
+		owner1.setId(1);
+		pet1.setOwner(owner1);
+
 		Pet pet2 = new Pet();
 		pet2.setId(2);
+		pet2.setType(dog);
+		Owner owner2 = new Owner();
+		owner2.setId(2);
+		pet2.setOwner(owner2);
 
 		Page<Pet> petsPage = new PageImpl<>(Lists.newArrayList(pet1, pet2), PageRequest.of(0, 5), 2);
 		given(this.pets.findByNameStartingWith(anyString(), any(PageRequest.class))).willReturn(petsPage);
