@@ -56,16 +56,21 @@
             <span>Find owners</span>
           </li>
 
+          <li th:replace="~{::menuItem ('/pets/find','pets','find pets','search','Find pets')}">
+            <span class="fa fa-search" aria-hidden="true"></span>
+            <span>Find pets</span>
+          </li>
+
           <li th:replace="~{::menuItem ('/vets.html','vets','veterinarians','th-list','Veterinarians')}">
             <span class="fa fa-th-list" aria-hidden="true"></span>
             <span>Veterinarians</span>
           </li>
 
-          <li
+          <!-- <li
             th:replace="~{::menuItem ('/oups','error','trigger a RuntimeException to see how it is handled','exclamation-triangle','Error')}">
             <span class="fa exclamation-triangle" aria-hidden="true"></span>
             <span>Error</span>
-          </li>
+          </li> -->
 
         </ul>
       </div>
@@ -96,16 +101,13 @@
         <!-- Chat messages will be dynamically inserted here -->
       </div>
       <div id="chatbox-input-container">
-        <textarea 
-          id="chatbox-input" 
-          rows="1" 
-          onkeydown="handleKeyDown(event)"
+        <textarea id="chatbox-input" rows="1" onkeydown="handleKeyDown(event)"
           placeholder="Enter your message..."></textarea>
         <button onclick="sendMessage()" class="btn btn-primary">
-            <i class="fa fa-paper-plane"></i>
+          <i class="fa fa-paper-plane"></i>
         </button>
         <button id="mic-button" onclick="toggleSpeechRecognition()" class="btn btn-primary">
-            <i class="fa fa-microphone"></i>
+          <i class="fa fa-microphone"></i>
         </button>
       </div>
     </div>
