@@ -51,18 +51,18 @@
             <span>Home</span>
           </li>
 
-          <li th:replace="~{::menuItem ('/owners/find','owners','find owners','search','Find owners')}">
+          <li th:replace="~{::menuItem ('/owners/find','owners','find owners','search','Owners')}">
             <span class="fa fa-search" aria-hidden="true"></span>
-            <span>Find owners</span>
+            <span>Owners</span>
           </li>
 
-          <li th:replace="~{::menuItem ('/pets/find','pets','find pets','search','Find pets')}">
+          <li th:replace="~{::menuItem ('/pets/find','pets','find pets','search','Pets')}">
             <span class="fa fa-search" aria-hidden="true"></span>
-            <span>Find pets</span>
+            <span>Pets</span>
           </li>
 
-          <li th:replace="~{::menuItem ('/vets.html','vets','veterinarians','th-list','Veterinarians')}">
-            <span class="fa fa-th-list" aria-hidden="true"></span>
+          <li th:replace="~{::menuItem ('/vets.html','vets','find veterinarians','search','Veterinarians')}">
+            <span class="fa fa-search" aria-hidden="true"></span>
             <span>Veterinarians</span>
           </li>
 
@@ -86,7 +86,8 @@
       <div class="container">
         <div class="row">
           <div class="col-12 text-center">
-            <img src="../static/images/spring-logo.svg" th:src="@{/resources/images/spring-logo.svg}" alt="VMware Tanzu Logo" class="logo">
+            <img src="../static/images/spring-logo.svg" th:src="@{/resources/images/spring-logo.svg}"
+              alt="VMware Tanzu Logo" class="logo">
           </div>
         </div>
       </div>

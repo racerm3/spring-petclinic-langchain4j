@@ -16,6 +16,7 @@
 package org.springframework.samples.petclinic.vet;
 
 import java.util.List;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -45,19 +46,37 @@ public interface VetRepository extends JpaRepository<Vet, Integer> {
 	List<Vet> findAll();
 
 	/**
+	 * Save a <code>Vet</code> to the data store, either inserting or updating it.
+	 * @param vet the entity to save
+	 * @return the saved entity
+	 */
+	@Transactional
+	@CacheEvict(value = "vets", allEntries = true)
+	<S extends Vet> S save(S vet);
+
+	/**
 	 * Count the number of <code>Vet</code>s in the data store.
 	 */
 	@Transactional(readOnly = true)
 	@Query("SELECT COUNT(v) FROM Vet v")
 	Integer countVets();
 
-	/**
-	 * Retrieve all <code>Vet</code>s from data store in Pages
-	 * @param pageable
-	 * @return
-	 */
 	@Transactional(readOnly = true)
 	@Cacheable("vets")
 	Page<Vet> findAll(Pageable pageable);
+
+	/**
+	 * Retrieve all <code>Vet</code>s from data store in Pages by last name and specialty.
+	 * @param lastName last name to search for
+	 * @param specialtyId specialty ID to filter by
+	 * @param pageable
+	 * @return a Page of matching <code>Vet</code>s
+	 */
+	@Transactional(readOnly = true)
+	@Query("SELECT DISTINCT v FROM Vet v LEFT JOIN v.specialties s WHERE "
+			+ "(:lastName IS NULL OR LOWER(v.lastName) LIKE LOWER(CONCAT(:lastName, '%'))) AND "
+			+ "(:specialtyId IS NULL OR s.id = :specialtyId)")
+	Page<Vet> findByLastNameAndSpecialty(@org.springframework.data.repository.query.Param("lastName") String lastName,
+			@org.springframework.data.repository.query.Param("specialtyId") Integer specialtyId, Pageable pageable);
 
 }

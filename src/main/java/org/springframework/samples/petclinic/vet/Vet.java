@@ -66,6 +66,10 @@ public class Vet extends Person {
 			.collect(Collectors.toList());
 	}
 
+	public void setSpecialties(List<Specialty> specialties) {
+		this.specialties = new HashSet<>(specialties);
+	}
+
 	@JsonIgnore
 	public int getNrOfSpecialties() {
 		return getSpecialtiesInternal().size();
