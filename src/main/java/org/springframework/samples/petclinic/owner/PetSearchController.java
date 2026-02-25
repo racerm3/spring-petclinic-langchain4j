@@ -70,6 +70,7 @@ class PetSearchController {
 		}
 
 		// multiple pets found
+		model.addAttribute("pet", pet);
 		return addPaginationModel(page, model, petsResults);
 	}
 

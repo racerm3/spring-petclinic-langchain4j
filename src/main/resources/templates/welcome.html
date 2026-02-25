@@ -4,11 +4,15 @@
 
   <body>
 
-    <h2 th:text="#{welcome}">Welcome</h2>
-    <div class="row">
-        <div class="col-md-12">
-          <img class="img-responsive" src="../static/resources/images/pets.png" th:src="@{/resources/images/pets.png}"/>
-        </div>
+    <div class="page-header">
+      <h1 th:text="#{welcome}">Welcome</h1>
+      <p class="index-page--subtitle">We care for your pets. Find owners, manage pets, and connect with our veterinarians.</p>
+    </div>
+
+    <div class="row justify-content-center">
+      <div class="col-md-10 col-lg-8">
+        <img class="img-fluid" src="../static/resources/images/pets.png" th:src="@{/resources/images/pets.png}" alt="Professional care for your pet"/>
+      </div>
     </div>
 
   </body>

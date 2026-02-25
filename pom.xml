@@ -39,7 +39,8 @@
     <nohttp-checkstyle.version>0.0.11</nohttp-checkstyle.version>
     <spring-format.version>0.0.43</spring-format.version>
     <langchain4j.version>1.11.0</langchain4j.version>
-    <langchain4j-google-ai-gemini-spring-boot.version>1.11.0-beta19</langchain4j-google-ai-gemini-spring-boot.version>
+    <langchain4j-google-ai-gemini-spring-boot-starter.version>1.11.0-beta19</langchain4j-google-ai-gemini-spring-boot-starter.version>
+    <langchain4j-ollama-spring-boot-starter.version>1.11.0-beta19</langchain4j-ollama-spring-boot-starter.version>
   </properties>
 
   <dependencyManagement>
@@ -516,6 +517,7 @@
         <dependency>
           <groupId>dev.langchain4j</groupId>
           <artifactId>langchain4j-ollama-spring-boot-starter</artifactId>
+          <version>${langchain4j-ollama-spring-boot-starter.version}</version>
         </dependency>
       </dependencies>
     </profile>
@@ -528,7 +530,7 @@
         <dependency>
           <groupId>dev.langchain4j</groupId>
           <artifactId>langchain4j-google-ai-gemini-spring-boot-starter</artifactId>
-          <version>${langchain4j-google-ai-gemini-spring-boot.version}</version>
+          <version>${langchain4j-google-ai-gemini-spring-boot-starter.version}</version>
         </dependency>
       </dependencies>
     </profile>

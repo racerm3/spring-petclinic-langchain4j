@@ -1,23 +1,28 @@
-@media (max-width: 768px) {
-  .navbar-toggle {
-    position:absolute;
-    z-index: 9999;
-    left:0px;
-    top:0px;
+@media (max-width: 991.98px) {
+  .navbar a.navbar-brand {
+    width: 140px;
+    height: 32px;
+    margin: 6px 0;
   }
 
+  .navbar a.navbar-brand span {
+    width: 140px;
+    height: 32px;
+  }
+
+  .navbar .navbar-nav .nav-link {
+    padding: 0.5rem 0.75rem;
+  }
+}
+
+@media (max-width: 768px) {
   .navbar a.navbar-brand {
     display: block;
-    margin: 0 auto 0 auto;
-    width: 148px;
-    height: 50px;
-    float: none;
-    background: url("../images/spring-logo-dataflow-mobile.png") 0 center no-repeat;
-  }
-
-  .homepage-billboard .homepage-subtitle {
-    font-size: 21px;
-    line-height: 21px;
+    margin: 6px auto;
+    width: 120px;
+    height: 28px;
+    background: url("../images/spring-logo-dataflow-mobile.png") center no-repeat;
+    background-size: contain;
   }
 
   .navbar a.navbar-brand span {
@@ -25,17 +30,19 @@
   }
 
   .navbar {
-    border-top-width: 0;
+    border-top-width: 2px;
   }
 
-  .xd-container {
-    margin-top: 20px;
-    margin-bottom: 30px;
+  .xd-container,
+  .app-container {
+    margin-top: $app-spacing;
+    margin-bottom: 2.5rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
   }
 
   .index-page--subtitle {
-    margin-top: 10px;
-    margin-bottom: 30px;
+    margin-top: 0.5rem;
+    margin-bottom: $app-spacing-lg;
   }
-
 }

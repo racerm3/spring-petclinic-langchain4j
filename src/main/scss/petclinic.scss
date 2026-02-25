@@ -11,150 +11,175 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- @import "bootstrap";
 
-$icon-font-path:    "../../webjars/bootstrap/fonts/";
+// ---------------------------------------------------------------------------
+// 1. Design tokens (modern theme)
+// ---------------------------------------------------------------------------
+$app-primary:           #0d9488;
+$app-primary-hover:     #0f766e;
+$app-secondary:          #6db33f;
+$app-secondary-hover:    #5fa134;
+$app-page-bg:           #f8fafc;
+$app-card-bg:            #ffffff;
+$app-text-primary:      #1e293b;
+$app-text-secondary:    #64748b;
+$app-text-muted:         #94a3b8;
+$app-border-color:       #e2e8f0;
+$app-radius:             0.5rem;
+$app-radius-lg:          0.75rem;
+$app-shadow-sm:         0 1px 2px rgba(0, 0, 0, 0.05);
+$app-shadow:             0 1px 3px rgba(0, 0, 0, 0.08);
+$app-shadow-md:          0 4px 6px -1px rgba(0, 0, 0, 0.08), 0 2px 4px -2px rgba(0, 0, 0, 0.06);
+$app-spacing:            1.5rem;
+$app-spacing-lg:         2rem;
 
-$spring-green:      #6db33f;
-$spring-dark-green: #5fa134;
-$spring-brown:      #34302D;
-$spring-grey:       #838789;
-$spring-light-grey: #f1f1f1;
-
-$chatbox-bg-color: #f1f1f1;
-$chatbox-header-bg-color: #075E54;
-$chatbox-header-text-color: white;
+// Chat (use theme accent)
+$chatbox-bg-color: $app-card-bg;
+$chatbox-header-bg-color: $app-primary;
+$chatbox-header-text-color: #ffffff;
 $chatbox-height: 400px;
-$chatbox-border-radius: 10px;
-$chatbox-box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-$chatbox-bubble-user-bg-color: #dcf8c6;
-$chatbox-bubble-bot-bg-color: #ffffff;
-$chatbox-bubble-border-color: #e1e1e1;
-$chatbox-footer-bg-color: #f9f9f9;
-$chatbox-input-border-color: #ccc;
-$chatbox-button-bg-color: #075E54;
-$chatbox-button-hover-bg-color: #128C7E;
+$chatbox-border-radius: $app-radius-lg;
+$chatbox-box-shadow: $app-shadow-md;
+$chatbox-bubble-user-bg-color: #ccfbf1;
+$chatbox-bubble-bot-bg-color: #f1f5f9;
+$chatbox-bubble-border-color: $app-border-color;
+$chatbox-footer-bg-color: #f8fafc;
+$chatbox-input-border-color: $app-border-color;
+$chatbox-button-bg-color: $app-primary;
+$chatbox-button-hover-bg-color: $app-primary-hover;
 
-$body-bg:                           $spring-light-grey;
-$text-color:                        $spring-brown;
-$link-color:                        $spring-dark-green;
-$link-hover-color:                  $spring-dark-green;
+// Legacy names for partials that still reference them
+$spring-green:      $app-secondary;
+$spring-dark-green: $app-secondary-hover;
+$spring-brown:      $app-text-primary;
+$spring-grey:       $app-text-secondary;
+$spring-light-grey: $app-page-bg;
 
-$navbar-default-link-color:         $spring-light-grey;
-$navbar-default-link-active-color:  $spring-light-grey;
-$navbar-default-link-hover-color:   $spring-light-grey;
-$navbar-default-link-hover-bg:      $spring-green;
-$navbar-default-toggle-icon-bar-bg: $spring-light-grey;
-$navbar-default-toggle-hover-bg:    transparent;
-$navbar-default-link-active-bg:     $spring-green;
+// ---------------------------------------------------------------------------
+// 2. Bootstrap 5 variable overrides (before import)
+// ---------------------------------------------------------------------------
+$primary:       $app-primary;
+$secondary:     $app-text-secondary;
+$success:       #059669;
+$danger:        #dc2626;
+$body-bg:       $app-page-bg;
+$body-color:    $app-text-primary;
+$border-radius: $app-radius;
+$border-radius-sm: 0.25rem;
+$border-radius-lg: $app-radius-lg;
+$border-color:  $app-border-color;
+$box-shadow:    $app-shadow;
+$box-shadow-sm: $app-shadow-sm;
+$link-color:    $app-primary;
+$link-hover-color: $app-primary-hover;
+$navbar-dark-color: rgba(255, 255, 255, 0.85);
+$navbar-dark-hover-color: #fff;
+$navbar-dark-active-color: #fff;
 
-$border-radius-base:             0;
-$border-radius-large:            0;
-$border-radius-small:            0;
+$icon-font-path: "../../webjars/bootstrap/fonts/";
 
-$nav-tabs-active-link-hover-color:        $spring-light-grey;
-$nav-tabs-active-link-hover-bg:           $spring-brown;
-$nav-tabs-active-link-hover-border-color: $spring-brown;
-$nav-tabs-border-color:                   $spring-brown;
+@import "bootstrap";
 
-$pagination-active-bg:                    $spring-brown;
-$pagination-active-border:                $spring-green;
-$table-border-color:                      $spring-brown;
-
+// ---------------------------------------------------------------------------
+// 3. Global component overrides (use design tokens)
+// ---------------------------------------------------------------------------
 .table > thead > tr > th {
-  background-color: lighten($spring-brown, 3%);
-  color: $spring-light-grey;
+  background-color: $app-text-primary;
+  color: #fff;
+  font-weight: 600;
+  border-color: $app-border-color;
 }
 
-.table-filter {
-  background-color: $spring-brown;
-  padding: 9px 12px;
+.table-striped > tbody > tr:nth-of-type(odd) {
+  background-color: rgba(0, 0, 0, 0.02);
 }
 
-.nav > li > a {
-  color: $spring-grey;
+.table-hover tbody tr:hover {
+  background-color: rgba($app-primary, 0.06);
 }
 
-.btn-primary {
-  margin-top: 12px;
-  border-width: 2px;
-  transition: border 0.15s;
-  color: $spring-light-grey;
-  background: $spring-brown;
-  border-color: $spring-green;
-  -webkit-transition: border 0.15s;
-  -moz-transition: border 0.15s;
-  -o-transition: border 0.15s;
-  -ms-transition: border 0.15s;
+.table-responsive {
+  border-radius: $app-radius-lg;
+  border: 1px solid $app-border-color;
+  overflow: hidden;
+  background: $app-card-bg;
+  box-shadow: $app-shadow-sm;
+}
 
-  &:hover,
-  &:focus,
-  &:active,
-  &.active,
-  .open .dropdown-toggle {
-    background-color: $spring-brown;
-    border-color: $spring-brown;
+.pagination {
+  .page-link {
+    border-radius: $app-radius !important;
+    color: $app-primary;
+    border-color: $app-border-color;
+  }
+  .page-item.active .page-link {
+    background-color: $app-primary;
+    border-color: $app-primary;
+  }
+  .page-link:hover {
+    background-color: rgba($app-primary, 0.08);
+    border-color: $app-border-color;
   }
 }
 
+.pagination-links {
+  a {
+    color: $app-primary;
+    text-decoration: none;
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+  .text-secondary {
+    color: $app-text-muted !important;
+    cursor: default;
+  }
+}
 
 .container .text-muted {
   margin: 20px 0;
+  color: $app-text-muted !important;
 }
 
 code {
   font-size: 80%;
 }
 
-.xd-container {
-  margin-top: 40px;
-  margin-bottom: 100px;
-  padding-left: 5px;
-  padding-right: 5px;
+.xd-container,
+.app-container {
+  margin-top: $app-spacing-lg;
+  margin-bottom: 4rem;
+  padding-left: $app-spacing;
+  padding-right: $app-spacing;
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.page-header {
+  margin-bottom: $app-spacing-lg;
 }
 
 h1 {
-  margin-bottom: 15px
+  margin-bottom: 0.5rem;
 }
 
 .index-page--subtitle {
-  font-size: 16px;
-  line-height: 24px;
-  margin: 0 0 30px;
-}
-
-.form-horizontal button.btn-inverse {
-  margin-left: 32px;
-}
-
-#job-params-modal .modal-dialog {
-  width: 90%;
-  margin-left:auto;
-  margin-right:auto;
-}
-
-[ng-cloak].splash {
-  display: block !important;
-}
-[ng-cloak] {
-  display: none;
-}
-
-.splash {
-  background: $spring-green;
-  color: $spring-brown;
-  display: none;
+  font-size: 1rem;
+  line-height: 1.5;
+  margin: 0 0 $app-spacing-lg;
+  color: $app-text-secondary;
 }
 
 .error-page {
-  margin-top: 100px;
+  margin-top: 4rem;
   text-align: center;
 }
 
 .error-page .error-title {
-  font-size: 24px;
-  line-height: 24px;
-  margin: 30px 0 0;
+  font-size: 1.5rem;
+  line-height: 1.5;
+  margin: 1rem 0 0;
 }
 
 table td {
@@ -170,168 +195,70 @@ table td.action-column {
 }
 
 .help-block {
-  color: lighten($text-color, 50%); // lighten the text some for contrast
+  color: $app-text-muted;
 }
 
-.xd-containers {
-  font-size: 15px;
-}
-
-.cluster-view > table td {
-  vertical-align: top;
-}
-
-.cluster-view .label, .cluster-view .column-block {
-  display: block;
-}
-
-.cluster-view .input-group-addon {
-  width: 0%;
-}
-
-.cluster-view {
-  margin-bottom: 0;
-}
-
-.container-details-table th {
-  background-color: lighten($spring-brown, 3%);
-  color: $spring-light-grey;
-}
-
-.status-help-content-table td {
-  color: $spring-brown;
+.app-footer {
+  margin-top: 2.5rem;
+  padding-top: 1.5rem;
+  padding-bottom: 1rem;
+  text-align: center;
+  border-top: 1px solid $app-border-color;
 }
 
 .logo {
-  width: 200px;
-}
-
-.myspinner {
-  animation-name: spinner;
-  animation-duration: 2s;
-  animation-iteration-count: infinite;
-  animation-timing-function: linear;
-
-  -webkit-transform-origin: 49% 50%;
-  -webkit-animation-name: spinner;
-  -webkit-animation-duration: 2s;
-  -webkit-animation-iteration-count: infinite;
-  -webkit-animation-timing-function: linear;
+  width: 120px;
+  height: auto;
+  opacity: 0.7;
 }
 
 hr {
-  border-top: 1px dotted $spring-brown;
+  border-top: 1px solid $app-border-color;
+  opacity: 0.8;
 }
 
-/* Chatbox container */
-.chatbox {
-  position: fixed;
-  bottom: 10px;
-  right: 10px;
-  width: 300px;
-  background-color: $chatbox-bg-color;
-  border-radius: $chatbox-border-radius;
-  box-shadow: $chatbox-box-shadow;
-  display: flex;
-  flex-direction: column;
-  
-  &.minimized {
-    .chatbox-content {
-      height: 40px; /* Height when minimized (header only) */
-    }
-    .chatbox-messages,
-    .chatbox-footer {
-      display: none;
-    }
-  }
-}
-
-/* Header styling */
-.chatbox-header {
-  background-color: $chatbox-header-bg-color;
-  color: $chatbox-header-text-color;
-  padding: 10px;
-  text-align: center;
-  border-top-left-radius: $chatbox-border-radius;
-  border-top-right-radius: $chatbox-border-radius;
-  cursor: pointer;
-}
-
-/* Chatbox content styling */
-.chatbox-content {
-  display: flex;
-  flex-direction: column;
-  height: $chatbox-height; /* Adjust to desired height */
-  overflow: hidden; /* Hide overflow to make it scrollable */
-}
-
-.chatbox-messages {
-  flex-grow: 1;
-  overflow-y: auto; /* Allows vertical scrolling */
-  padding: 10px;
-}
-
-/* Chat bubbles styling */
-.chat-bubble {
-  max-width: 80%;
-  padding: 10px;
-  border-radius: 20px;
-  margin-bottom: 10px;
-  position: relative;
-  word-wrap: break-word;
-  font-size: 14px;
-
-  strong {
-    font-weight: bold;
-  }
-  
-  em {
-    font-style: italic;
-  }
-
-  &.user {
-    background-color: $chatbox-bubble-user-bg-color; /* WhatsApp-style light green */
-    margin-left: auto;
-    text-align: right;
-    border-bottom-right-radius: 0;
-  }
-
-  &.bot {
-    background-color: $chatbox-bubble-bot-bg-color;
-    margin-right: auto;
-    text-align: left;
-    border-bottom-left-radius: 0;
-    border: 1px solid $chatbox-bubble-border-color;
-  }
-}
-
-/* Input field and button */
-.chatbox-footer {
-  padding: 10px;
-  background-color: $chatbox-footer-bg-color;
-  display: flex;
-}
-
-.chatbox-footer input {
-  flex-grow: 1;
-  padding: 10px;
-  border-radius: 20px;
-  border: 1px solid $chatbox-input-border-color;
-  margin-right: 10px;
-  outline: none;
-}
-
-.chatbox-footer button {
-  background-color: $chatbox-button-bg-color;
-  color: white;
-  border: none;
-  padding: 10px;
-  border-radius: 50%;
-  cursor: pointer;
+.btn {
+  border-radius: $app-radius;
+  font-weight: 500;
+  box-shadow: $app-shadow-sm;
+  transition: box-shadow 0.15s ease, transform 0.15s ease;
 
   &:hover {
-    background-color: $chatbox-button-hover-bg-color;
+    box-shadow: $app-shadow;
   }
+}
+
+.btn-primary {
+  border: none;
+}
+
+.form-control,
+.form-select {
+  border-radius: $app-radius;
+  border-color: $app-border-color;
+
+  &:focus {
+    border-color: $app-primary;
+    box-shadow: 0 0 0 3px rgba($app-primary, 0.15);
+  }
+}
+
+.alert-success {
+  background-color: rgba($success, 0.12);
+  border-color: rgba($success, 0.3);
+  color: darken($success, 15%);
+}
+
+.alert-danger {
+  background-color: rgba($danger, 0.08);
+  border-color: rgba($danger, 0.25);
+  color: darken($danger, 5%);
+}
+
+.card {
+  border-radius: $app-radius-lg;
+  border-color: $app-border-color;
+  box-shadow: $app-shadow;
 }
 
 @import "typography.scss";
