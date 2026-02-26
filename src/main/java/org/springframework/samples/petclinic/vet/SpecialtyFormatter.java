@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.Locale;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.Formatter;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 
 /**
@@ -21,12 +22,14 @@ public class SpecialtyFormatter implements Formatter<Specialty> {
 	}
 
 	@Override
-	public String print(Specialty specialty, Locale locale) {
+	@NonNull
+	public String print(@NonNull Specialty specialty, @NonNull Locale locale) {
 		return specialty.getName();
 	}
 
 	@Override
-	public Specialty parse(String text, Locale locale) throws ParseException {
+	@NonNull
+	public Specialty parse(@NonNull String text, @NonNull Locale locale) throws ParseException {
 		Collection<Specialty> findSpecialties = this.specialtyRepository.findAll();
 		for (Specialty specialty : findSpecialties) {
 			if (specialty.getName().equals(text)) {

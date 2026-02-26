@@ -18,6 +18,7 @@ package org.springframework.samples.petclinic.vet;
 import java.util.List;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.lang.NonNull;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -41,8 +42,10 @@ public interface VetRepository extends JpaRepository<Vet, Integer> {
 	 * Retrieve all <code>Vet</code>s from the data store.
 	 * @return a <code>Collection</code> of <code>Vet</code>s
 	 */
+	@Override
 	@Transactional(readOnly = true)
 	@Cacheable("vets")
+	@NonNull
 	List<Vet> findAll();
 
 	/**
@@ -50,9 +53,11 @@ public interface VetRepository extends JpaRepository<Vet, Integer> {
 	 * @param vet the entity to save
 	 * @return the saved entity
 	 */
+	@Override
 	@Transactional
 	@CacheEvict(value = "vets", allEntries = true)
-	<S extends Vet> S save(S vet);
+	@NonNull
+	<S extends Vet> S save(@NonNull S vet);
 
 	/**
 	 * Count the number of <code>Vet</code>s in the data store.
@@ -61,9 +66,11 @@ public interface VetRepository extends JpaRepository<Vet, Integer> {
 	@Query("SELECT COUNT(v) FROM Vet v")
 	Integer countVets();
 
+	@Override
 	@Transactional(readOnly = true)
 	@Cacheable("vets")
-	Page<Vet> findAll(Pageable pageable);
+	@NonNull
+	Page<Vet> findAll(@NonNull Pageable pageable);
 
 	/**
 	 * Retrieve all <code>Vet</code>s from data store in Pages by last name and specialty.

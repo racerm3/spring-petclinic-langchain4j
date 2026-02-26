@@ -51,10 +51,6 @@ class PetSearchController {
 	public String processFindForm(@RequestParam(defaultValue = "1") int page, Pet pet, BindingResult result,
 			Model model) {
 		// allow parameterless GET request for /pets to return all records
-		if (pet.getName() == null) {
-			pet.setName(""); // empty string signifies broadest possible search
-		}
-
 		// find pets by name
 		Page<Pet> petsResults = findPaginatedForPetsName(page, pet.getName());
 		if (petsResults.isEmpty()) {

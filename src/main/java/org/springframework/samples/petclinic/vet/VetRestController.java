@@ -16,6 +16,7 @@
 package org.springframework.samples.petclinic.vet;
 
 import java.util.List;
+import org.springframework.lang.NonNull;
 
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -28,6 +29,7 @@ import org.springframework.web.bind.annotation.*;
  */
 @RestController
 @RequestMapping("/api/vets")
+@SuppressWarnings("null")
 class VetRestController {
 
 	private final VetRepository vets;
@@ -49,12 +51,14 @@ class VetRestController {
 
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public Vet createVet(@Valid @RequestBody Vet vet) {
+	@NonNull
+	public Vet createVet(@Valid @RequestBody @NonNull Vet vet) {
 		return this.vets.save(vet);
 	}
 
 	@PutMapping("/{vetId}")
-	public Vet updateVet(@PathVariable("vetId") int vetId, @Valid @RequestBody Vet vet) {
+	@NonNull
+	public Vet updateVet(@PathVariable("vetId") int vetId, @Valid @RequestBody @NonNull Vet vet) {
 		return this.vets.findById(vetId).map(existingVet -> {
 			vet.setId(vetId);
 			return this.vets.save(vet);

@@ -44,6 +44,7 @@ import static org.springframework.boot.test.context.SpringBootTest.WebEnvironmen
 @SpringBootTest(webEnvironment = RANDOM_PORT,
 		properties = { "server.error.include-message=ALWAYS", "management.endpoints.enabled-by-default=false" })
 @ActiveProfiles("test")
+@SuppressWarnings("null")
 class CrashControllerIntegrationTests {
 
 	@SpringBootApplication(exclude = { DataSourceAutoConfiguration.class,

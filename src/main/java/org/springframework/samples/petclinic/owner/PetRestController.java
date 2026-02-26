@@ -16,6 +16,7 @@
 package org.springframework.samples.petclinic.owner;
 
 import java.util.List;
+import org.springframework.lang.NonNull;
 
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -40,6 +41,7 @@ class PetRestController {
 	}
 
 	@GetMapping
+	@NonNull
 	public List<Pet> getAllPets() {
 		return this.pets.findAll();
 	}
@@ -51,13 +53,15 @@ class PetRestController {
 	}
 
 	@GetMapping("/types")
+	@NonNull
 	public List<PetType> getPetTypes() {
 		return this.owners.findPetTypes();
 	}
 
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public Pet createPet(@Valid @RequestBody Pet pet) {
+	@NonNull
+	public Pet createPet(@Valid @RequestBody @NonNull Pet pet) {
 		return this.pets.save(pet);
 	}
 

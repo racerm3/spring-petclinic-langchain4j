@@ -30,6 +30,7 @@ import java.util.Collection;
  * @see org.springframework.samples.petclinic.model.BaseEntity
  * @since 29.10.2003
  */
+@SuppressWarnings("null")
 public abstract class EntityUtils {
 
 	/**

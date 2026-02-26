@@ -38,6 +38,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  */
 @ExtendWith(MockitoExtension.class)
 @DisabledInNativeImage
+@SuppressWarnings("null")
 public class PetValidatorTests {
 
 	private PetValidator petValidator;

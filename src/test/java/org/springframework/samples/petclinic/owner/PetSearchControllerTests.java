@@ -40,6 +40,7 @@ import org.springframework.test.web.servlet.MockMvc;
  * Test class for the {@link PetSearchController}
  */
 @WebMvcTest(PetSearchController.class)
+@SuppressWarnings("null")
 class PetSearchControllerTests {
 
 	@Autowired

@@ -17,6 +17,7 @@ package org.springframework.samples.petclinic.model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.MappedSuperclass;
+import org.springframework.lang.NonNull;
 import jakarta.validation.constraints.NotBlank;
 
 /**
@@ -34,13 +35,15 @@ public class NamedEntity extends BaseEntity {
 
 	@Column(name = "name")
 	@NotBlank
-	private String name;
+	@NonNull
+	private String name = "";
 
+	@NonNull
 	public String getName() {
 		return this.name;
 	}
 
-	public void setName(String name) {
+	public void setName(@NonNull String name) {
 		this.name = name;
 	}
 

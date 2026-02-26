@@ -10,6 +10,7 @@ import org.springframework.samples.petclinic.owner.OwnerRepository;
 import org.springframework.samples.petclinic.owner.Pet;
 import org.springframework.samples.petclinic.owner.PetRepository;
 import org.springframework.samples.petclinic.owner.PetType;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
@@ -43,6 +44,7 @@ public class AssistantTool {
 	}
 
 	@Tool("List the owners that the pet clinic has: ownerId, name, address, phone number, pets")
+	@NonNull
 	public List<Owner> getAllOwners() {
 		Pageable pageable = PageRequest.of(0, 100);
 		Page<Owner> ownerPage = ownerRepository.findAll(pageable);
@@ -61,9 +63,11 @@ public class AssistantTool {
 	}
 
 	@Tool("Add a pet with the specified petTypeId and birthDate (yyyy-MM-dd), to an owner identified by the ownerId")
-	public Owner addPetToOwner(@P("the type id of the pet") Integer petTypeId, @P("the name of the pet") String petName,
-			@P("the birth date of the pet in yyyy-MM-dd format") String birthDate,
-			@P("the id of the owner") Integer ownerId) {
+	@NonNull
+	public Owner addPetToOwner(@P("the type id of the pet") @NonNull Integer petTypeId,
+			@P("the name of the pet") @NonNull String petName,
+			@P("the birth date of the pet in yyyy-MM-dd format") @NonNull String birthDate,
+			@P("the id of the owner") @NonNull Integer ownerId) {
 		Owner owner = ownerRepository.findById(ownerId).orElseThrow();
 		PetType petType = ownerRepository.findPetTypes()
 			.stream()
@@ -80,6 +84,7 @@ public class AssistantTool {
 	}
 
 	@Tool("List all pairs of petTypeId and pet type name")
+	@NonNull
 	public List<PetType> populatePetTypes() {
 		return this.ownerRepository.findPetTypes();
 	}
@@ -88,9 +93,11 @@ public class AssistantTool {
 			Add a new pet owner to the pet clinic. \
 			The Owner must include a first name and a last name as two separate words, \
 			plus an address, a city, and a 10-digit phone number""")
-	public Owner addOwnerToPetclinic(@P("first name of the owner") String firstName,
-			@P("last name of the owner") String lastName, @P("street address of the owner") String address,
-			@P("city of the owner") String city, @P("10-digit telephone number of the owner") String telephone) {
+	@NonNull
+	public Owner addOwnerToPetclinic(@P("first name of the owner") @NonNull String firstName,
+			@P("last name of the owner") @NonNull String lastName,
+			@P("street address of the owner") @NonNull String address, @P("city of the owner") @NonNull String city,
+			@P("10-digit telephone number of the owner") @NonNull String telephone) {
 		Owner owner = new Owner();
 		owner.setFirstName(firstName);
 		owner.setLastName(lastName);

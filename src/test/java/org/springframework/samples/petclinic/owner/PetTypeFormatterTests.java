@@ -40,6 +40,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
  */
 @ExtendWith(MockitoExtension.class)
 @DisabledInNativeImage
+@SuppressWarnings("null")
 class PetTypeFormatterTests {
 
 	@Mock

@@ -18,7 +18,7 @@ package org.springframework.samples.petclinic.owner;
 import java.util.List;
 import java.util.Optional;
 
-import jakarta.annotation.Nonnull;
+import org.springframework.lang.NonNull;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -43,6 +43,7 @@ public interface OwnerRepository extends JpaRepository<Owner, Integer> {
 	 * @return a Collection of {@link PetType}s.
 	 */
 	@Query("SELECT ptype FROM PetType ptype ORDER BY ptype.name")
+	@NonNull
 	List<PetType> findPetTypes();
 
 	/**
@@ -67,11 +68,15 @@ public interface OwnerRepository extends JpaRepository<Owner, Integer> {
 	 * @throws IllegalArgumentException if the id is null (assuming null is not a valid
 	 * input for id)
 	 */
-	Optional<Owner> findById(@Nonnull Integer id);
+	@Override
+	@NonNull
+	Optional<Owner> findById(@NonNull Integer id);
 
 	/**
 	 * Returns all the owners from data store
 	 **/
-	Page<Owner> findAll(Pageable pageable);
+	@Override
+	@NonNull
+	Page<Owner> findAll(@NonNull Pageable pageable);
 
 }

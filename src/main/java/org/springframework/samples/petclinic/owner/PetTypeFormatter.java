@@ -17,6 +17,7 @@ package org.springframework.samples.petclinic.owner;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.Formatter;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 
 import java.text.ParseException;
@@ -44,12 +45,14 @@ public class PetTypeFormatter implements Formatter<PetType> {
 	}
 
 	@Override
-	public String print(PetType petType, Locale locale) {
+	@NonNull
+	public String print(@NonNull PetType petType, @NonNull Locale locale) {
 		return petType.getName();
 	}
 
 	@Override
-	public PetType parse(String text, Locale locale) throws ParseException {
+	@NonNull
+	public PetType parse(@NonNull String text, @NonNull Locale locale) throws ParseException {
 		Collection<PetType> findPetTypes = this.owners.findPetTypes();
 		for (PetType type : findPetTypes) {
 			if (type.getName().equals(text)) {

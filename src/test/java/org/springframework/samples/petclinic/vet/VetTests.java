@@ -15,6 +15,7 @@
  */
 package org.springframework.samples.petclinic.vet;
 
+import java.util.Objects;
 import org.junit.jupiter.api.Test;
 import org.springframework.util.SerializationUtils;
 
@@ -33,6 +34,7 @@ class VetTests {
 		vet.setId(123);
 		@SuppressWarnings("deprecation")
 		Vet other = (Vet) SerializationUtils.deserialize(SerializationUtils.serialize(vet));
+		Objects.requireNonNull(other);
 		assertThat(other.getFirstName()).isEqualTo(vet.getFirstName());
 		assertThat(other.getLastName()).isEqualTo(vet.getLastName());
 		assertThat(other.getId()).isEqualTo(vet.getId());

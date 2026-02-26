@@ -474,6 +474,7 @@
                         <versionRange>[0,)</versionRange>
                         <goals>
                           <goal>validate</goal>
+                          <goal>apply</goal>
                         </goals>
                       </pluginExecutionFilter>
                       <action>

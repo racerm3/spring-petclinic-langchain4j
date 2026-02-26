@@ -16,7 +16,7 @@
 package org.springframework.samples.petclinic.owner;
 
 import java.util.List;
-import java.util.Optional;
+import org.springframework.lang.NonNull;
 
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -29,6 +29,7 @@ import org.springframework.web.bind.annotation.*;
  */
 @RestController
 @RequestMapping("/api/owners")
+@SuppressWarnings("null")
 class OwnerRestController {
 
 	private final OwnerRepository owners;
@@ -50,12 +51,14 @@ class OwnerRestController {
 
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public Owner createOwner(@Valid @RequestBody Owner owner) {
+	@NonNull
+	public Owner createOwner(@Valid @RequestBody @NonNull Owner owner) {
 		return this.owners.save(owner);
 	}
 
 	@PutMapping("/{ownerId}")
-	public Owner updateOwner(@PathVariable("ownerId") int ownerId, @Valid @RequestBody Owner owner) {
+	@NonNull
+	public Owner updateOwner(@PathVariable("ownerId") int ownerId, @Valid @RequestBody @NonNull Owner owner) {
 		return this.owners.findById(ownerId).map(existingOwner -> {
 			owner.setId(ownerId);
 			return this.owners.save(owner);

@@ -17,6 +17,7 @@ package org.springframework.samples.petclinic.model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.MappedSuperclass;
+import org.springframework.lang.NonNull;
 import jakarta.validation.constraints.NotBlank;
 
 /**
@@ -31,25 +32,29 @@ public class Person extends BaseEntity {
 
 	@Column(name = "first_name")
 	@NotBlank
-	private String firstName;
+	@NonNull
+	private String firstName = "";
 
 	@Column(name = "last_name")
 	@NotBlank
-	private String lastName;
+	@NonNull
+	private String lastName = "";
 
+	@NonNull
 	public String getFirstName() {
 		return this.firstName;
 	}
 
-	public void setFirstName(String firstName) {
+	public void setFirstName(@NonNull String firstName) {
 		this.firstName = firstName;
 	}
 
+	@NonNull
 	public String getLastName() {
 		return this.lastName;
 	}
 
-	public void setLastName(String lastName) {
+	public void setLastName(@NonNull String lastName) {
 		this.lastName = lastName;
 	}
 

@@ -49,6 +49,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Import(SpecialtyFormatter.class)
 @DisabledInNativeImage
 @DisabledInAotMode
+@SuppressWarnings("null")
 class VetControllerTests {
 
 	@Autowired

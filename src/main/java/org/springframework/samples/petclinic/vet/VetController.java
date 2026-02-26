@@ -16,11 +16,11 @@
 package org.springframework.samples.petclinic.vet;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -91,7 +91,8 @@ class VetController {
 	}
 
 	@PostMapping("/vets/new")
-	public String processCreationForm(@Valid Vet vet, BindingResult result, RedirectAttributes redirectAttributes) {
+	public String processCreationForm(@Valid @NonNull Vet vet, BindingResult result,
+			RedirectAttributes redirectAttributes) {
 		if (result.hasErrors()) {
 			return "vets/createOrUpdateVetForm";
 		}
@@ -106,7 +107,7 @@ class VetController {
 	}
 
 	@PostMapping("/vets/{vetId}/edit")
-	public String processUpdateForm(@Valid Vet vet, BindingResult result, @PathVariable("vetId") int vetId,
+	public String processUpdateForm(@Valid @NonNull Vet vet, BindingResult result, @PathVariable("vetId") int vetId,
 			RedirectAttributes redirectAttributes) {
 		if (result.hasErrors()) {
 			return "vets/createOrUpdateVetForm";

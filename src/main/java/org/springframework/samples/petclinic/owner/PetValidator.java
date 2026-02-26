@@ -15,6 +15,7 @@
  */
 package org.springframework.samples.petclinic.owner;
 
+import org.springframework.lang.NonNull;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
@@ -34,7 +35,7 @@ public class PetValidator implements Validator {
 	private static final String REQUIRED = "required";
 
 	@Override
-	public void validate(Object obj, Errors errors) {
+	public void validate(@NonNull Object obj, @NonNull Errors errors) {
 		Pet pet = (Pet) obj;
 		String name = pet.getName();
 		// name validation
@@ -57,7 +58,7 @@ public class PetValidator implements Validator {
 	 * This Validator validates *just* Pet instances
 	 */
 	@Override
-	public boolean supports(Class<?> clazz) {
+	public boolean supports(@NonNull Class<?> clazz) {
 		return Pet.class.isAssignableFrom(clazz);
 	}
 
