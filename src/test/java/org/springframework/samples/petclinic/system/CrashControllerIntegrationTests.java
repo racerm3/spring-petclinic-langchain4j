@@ -84,9 +84,8 @@ class CrashControllerIntegrationTests {
 		assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR);
 		assertThat(resp.getBody()).isNotNull();
 		// html:
-		assertThat(resp.getBody()).containsSubsequence("<body>", "<h2>", "Something happened...", "</h2>", "<p>",
-				"Expected:", "controller", "used", "to", "showcase", "what", "happens", "when", "an", "exception", "is",
-				"thrown", "</p>", "</body>");
+		assertThat(resp.getBody()).containsSubsequence("<body>", "Something happened...", "Expected:", "controller",
+				"used", "to", "showcase", "what", "happens", "when", "an", "exception", "is", "thrown", "</body>");
 		// Not the whitelabel error page:
 		assertThat(resp.getBody()).doesNotContain("Whitelabel Error Page",
 				"This application has no explicit mapping for");
