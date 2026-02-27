@@ -192,9 +192,68 @@ The Spring Petclinic LangChain4j application provides several REST API endpoints
 *   **GET** `/api/vets`: Retrieve a list of all veterinarians.
     *   **Sample:** `curl http://localhost:8080/api/vets`
 
-## Building a Container
+## Running with Docker
 
-There is no `Dockerfile` in this project. You can build a container image (if you have a docker daemon) using the Spring Boot build plugin:
+This project includes a `Dockerfile` and `docker-compose.yml` for running the application in a containerized environment using Docker Desktop for Windows.
+
+### Using Docker Compose (Recommended)
+
+1. **Configure Gemini API Key**:
+   Create a `.env` file in the root directory and add your Google Gemini API key:
+   ```env
+   GEMINI_API_KEY=your_api_key_here
+   ```
+
+2. **Start the application**:
+   ```bash
+   docker compose up --build
+   ```
+
+Once the build is complete, access the Petclinic at <http://localhost:8080/>.
+
+### Switching LLM Providers
+
+You can configure which LLM provider to use during image creation by setting the `LLM_PROFILE` build argument. Google Gemini is the default.
+
+**Using .env file (Recommended)**:
+Add or update the `LLM_PROFILE` variable in your `.env` file:
+```env
+LLM_PROFILE=openai
+```
+
+**Using Docker Compose directly**:
+Set the `LLM_PROFILE` environment variable before running `docker compose`:
+
+```bash
+# To use Google Gemini (Default)
+$env:LLM_PROFILE="gemini"; docker compose up --build
+
+# To use OpenAI
+$env:LLM_PROFILE="openai"; docker compose up --build
+```
+
+**Manual Build**:
+Pass the `LLM_PROFILE` as a build-arg:
+
+```bash
+# To use Google Gemini (Default)
+docker build --build-arg LLM_PROFILE=gemini -t spring-petclinic-langchain4j .
+
+# To use OpenAI
+docker build --build-arg LLM_PROFILE=openai -t spring-petclinic-langchain4j .
+```
+
+Supported profiles are: `gemini` (default), `openai`, `azure-openai`, and `ollama`.
+
+### Building the Container Manually
+
+You can build the Docker image manually using the multi-stage `Dockerfile`:
+
+```bash
+docker build -t spring-petclinic-langchain4j .
+```
+
+Alternatively, you can still use the Spring Boot build plugin:
 
 ```bash
 ./mvnw spring-boot:build-image

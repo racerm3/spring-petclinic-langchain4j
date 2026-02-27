@@ -1,21 +1,17 @@
 services:
-  mysql:
-    image: mysql:9.1
+  petclinic:
+    image: spring-petclinic-langchain4j
+    container_name: spring-petclinic-langchain4j
+    build:
+      context: .
+      args:
+        - LLM_PROFILE=${LLM_PROFILE:-gemini}
     ports:
-      - "3306:3306"
+      - "${PORT:-8080}:8080"
     environment:
-      - MYSQL_ROOT_PASSWORD=
-      - MYSQL_ALLOW_EMPTY_PASSWORD=true
-      - MYSQL_USER=petclinic
-      - MYSQL_PASSWORD=petclinic
-      - MYSQL_DATABASE=petclinic
-    volumes:
-      - "./conf.d:/etc/mysql/conf.d:ro"
-  postgres:
-    image: postgres:17.0
-    ports:
-      - "5432:5432"
-    environment:
-      - POSTGRES_PASSWORD=petclinic
-      - POSTGRES_USER=petclinic
-      - POSTGRES_DB=petclinic
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - AZURE_OPENAI_KEY=${AZURE_OPENAI_KEY}
+      - AZURE_OPENAI_ENDPOINT=${AZURE_OPENAI_ENDPOINT}
+      - SPRING_PROFILES_ACTIVE=${LLM_PROFILE:-gemini}
+      - DATABASE=h2
