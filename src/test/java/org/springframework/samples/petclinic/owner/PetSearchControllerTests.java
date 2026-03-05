@@ -66,7 +66,7 @@ class PetSearchControllerTests {
 		pet.setOwner(owner);
 
 		Page<Pet> petsPage = new PageImpl<>(Collections.singletonList(pet));
-		given(this.pets.findByNameStartingWith(anyString(), any(PageRequest.class))).willReturn(petsPage);
+		given(this.pets.findByNameStartingWithIgnoreCase(anyString(), any(PageRequest.class))).willReturn(petsPage);
 
 		mockMvc.perform(get("/pets").param("name", "Leo"))
 			.andExpect(status().is3xxRedirection())
@@ -93,7 +93,7 @@ class PetSearchControllerTests {
 		pet2.setOwner(owner2);
 
 		Page<Pet> petsPage = new PageImpl<>(Lists.newArrayList(pet1, pet2), PageRequest.of(0, 5), 2);
-		given(this.pets.findByNameStartingWith(anyString(), any(PageRequest.class))).willReturn(petsPage);
+		given(this.pets.findByNameStartingWithIgnoreCase(anyString(), any(PageRequest.class))).willReturn(petsPage);
 
 		mockMvc.perform(get("/pets"))
 			.andExpect(status().isOk())
@@ -103,7 +103,7 @@ class PetSearchControllerTests {
 
 	@Test
 	void testProcessFindFormNoResults() throws Exception {
-		given(this.pets.findByNameStartingWith(anyString(), any(PageRequest.class)))
+		given(this.pets.findByNameStartingWithIgnoreCase(anyString(), any(PageRequest.class)))
 			.willReturn(new PageImpl<>(Collections.emptyList()));
 
 		mockMvc.perform(get("/pets").param("name", "UnknownPet"))

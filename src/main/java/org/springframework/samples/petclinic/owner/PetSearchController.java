@@ -82,7 +82,7 @@ class PetSearchController {
 	private Page<Pet> findPaginatedForPetsName(int page, String name) {
 		int pageSize = 5;
 		Pageable pageable = PageRequest.of(page - 1, pageSize);
-		return pets.findByNameStartingWith(name, pageable);
+		return pets.findByNameStartingWithIgnoreCase(name, pageable);
 	}
 
 }
