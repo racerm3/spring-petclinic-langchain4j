@@ -74,14 +74,21 @@ class VetController {
 	public String showVetList(@RequestParam(defaultValue = "1") int page,
 			@RequestParam(required = false) String lastName, @RequestParam(required = false) Integer specialtyId,
 			Model model) {
+		boolean searchExecuted = (lastName != null || specialtyId != null);
+		model.addAttribute("lastName", lastName);
+		model.addAttribute("specialtyId", specialtyId);
+		model.addAttribute("searchExecuted", searchExecuted);
+
+		if (!searchExecuted) {
+			return "vets/vetList";
+		}
+
 		// Here we are returning an object of type 'Vets' rather than a collection of
 		// Vet
 		// objects so it is simpler for Object-Xml mapping
 		Vets vets = new Vets();
 		Page<Vet> paginated = findPaginated(page, lastName, specialtyId);
 		vets.getVetList().addAll(paginated.toList());
-		model.addAttribute("lastName", lastName);
-		model.addAttribute("specialtyId", specialtyId);
 		return addPaginationModel(page, paginated, model);
 	}
 
