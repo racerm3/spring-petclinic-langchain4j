@@ -121,11 +121,11 @@ By default, the Ollama REST API starts on `http://localhost:11434`. This URL is 
 
 Get an API key from [Google AI Studio](https://ai.google.dev/gemini-api/docs/api-key).
 
-Export your API key as an environment variable:
+Export your API key and optionally the model name as environment variables:
 ```bash
 export GEMINI_API_KEY="your_api_key_here"
+export GEMINI_MODEL="gemini-2.0-flash"   # optional; defaults to gemini-2.0-flash if unset
 ```
-The application uses the `gemini-2.5-flash` model by default; you can change it in `application.properties`.
 
 
 ## Run Petclinic locally
@@ -199,9 +199,10 @@ This project includes a `Dockerfile` and `docker-compose.yml` for running the ap
 ### Using Docker Compose (Recommended)
 
 1. **Configure Gemini API Key**:
-   Create a `.env` file in the root directory and add your Google Gemini API key:
+   Create a `.env` file in the root directory and add your Google Gemini API key (and optionally the model name):
    ```env
    GEMINI_API_KEY=your_api_key_here
+   GEMINI_MODEL=gemini-2.0-flash
    ```
 
 2. **Start the application**:
