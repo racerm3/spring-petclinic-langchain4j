@@ -21,6 +21,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.lang.NonNull;
+import org.springframework.samples.petclinic.chat.RagEmbeddingService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -50,8 +51,11 @@ class OwnerController {
 
 	private final OwnerRepository owners;
 
-	public OwnerController(OwnerRepository owners) {
+	private final RagEmbeddingService ragEmbeddingService;
+
+	public OwnerController(OwnerRepository owners, RagEmbeddingService ragEmbeddingService) {
 		this.owners = owners;
+		this.ragEmbeddingService = ragEmbeddingService;
 	}
 
 	@InitBinder
@@ -81,6 +85,7 @@ class OwnerController {
 		}
 
 		this.owners.save(owner);
+		this.ragEmbeddingService.ingestOwners(List.of(owner));
 		redirectAttributes.addFlashAttribute("message", "New Owner Created");
 		return "redirect:/owners/" + owner.getId();
 	}
@@ -149,6 +154,7 @@ class OwnerController {
 
 		owner.setId(ownerId);
 		this.owners.save(owner);
+		this.ragEmbeddingService.ingestOwners(List.of(owner));
 		redirectAttributes.addFlashAttribute("message", "Owner Values Updated");
 		return "redirect:/owners/{ownerId}";
 	}

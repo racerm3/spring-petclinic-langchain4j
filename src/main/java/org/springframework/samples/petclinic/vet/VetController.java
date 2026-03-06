@@ -21,6 +21,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.lang.NonNull;
+import org.springframework.samples.petclinic.chat.RagEmbeddingService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -49,9 +50,13 @@ class VetController {
 
 	private final SpecialtyRepository specialtyRepository;
 
-	public VetController(VetRepository vetRepository, SpecialtyRepository specialtyRepository) {
+	private final RagEmbeddingService ragEmbeddingService;
+
+	public VetController(VetRepository vetRepository, SpecialtyRepository specialtyRepository,
+			RagEmbeddingService ragEmbeddingService) {
 		this.vetRepository = vetRepository;
 		this.specialtyRepository = specialtyRepository;
+		this.ragEmbeddingService = ragEmbeddingService;
 	}
 
 	@InitBinder
@@ -104,6 +109,7 @@ class VetController {
 			return "vets/createOrUpdateVetForm";
 		}
 		this.vetRepository.save(vet);
+		this.ragEmbeddingService.ingestVets(List.of(vet));
 		redirectAttributes.addFlashAttribute("message", "New Veterinarian Created");
 		return "redirect:/vets.html";
 	}
@@ -121,6 +127,7 @@ class VetController {
 		}
 		vet.setId(vetId);
 		this.vetRepository.save(vet);
+		this.ragEmbeddingService.ingestVets(List.of(vet));
 		redirectAttributes.addFlashAttribute("message", "Veterinarian Updated");
 		return "redirect:/vets.html";
 	}

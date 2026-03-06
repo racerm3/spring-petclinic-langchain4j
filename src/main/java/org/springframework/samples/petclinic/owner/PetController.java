@@ -19,6 +19,7 @@ import java.time.LocalDate;
 import java.util.Collection;
 import java.util.Optional;
 
+import org.springframework.samples.petclinic.chat.RagEmbeddingService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.util.StringUtils;
@@ -48,8 +49,11 @@ class PetController {
 
 	private final OwnerRepository owners;
 
-	public PetController(OwnerRepository owners) {
+	private final RagEmbeddingService ragEmbeddingService;
+
+	public PetController(OwnerRepository owners, RagEmbeddingService ragEmbeddingService) {
 		this.owners = owners;
+		this.ragEmbeddingService = ragEmbeddingService;
 	}
 
 	@ModelAttribute("types")
@@ -114,6 +118,7 @@ class PetController {
 
 		owner.addPet(pet);
 		this.owners.save(owner);
+		this.ragEmbeddingService.ingestPets(java.util.List.of(pet));
 		redirectAttributes.addFlashAttribute("message", "New Pet has been Added");
 		return "redirect:/owners/{ownerId}";
 	}
@@ -148,6 +153,7 @@ class PetController {
 
 		owner.addPet(pet);
 		this.owners.save(owner);
+		this.ragEmbeddingService.ingestPets(java.util.List.of(pet));
 		redirectAttributes.addFlashAttribute("message", "Pet details has been edited");
 		return "redirect:/owners/{ownerId}";
 	}
