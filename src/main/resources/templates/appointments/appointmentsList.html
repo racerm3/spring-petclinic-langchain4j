@@ -1,0 +1,49 @@
+<html xmlns:th="https://www.thymeleaf.org" th:replace="~{fragments/layout :: layout (~{::body},'appointments')}">
+
+<body>
+
+  <div class="page-header d-flex justify-content-between align-items-center mb-3">
+    <h2>Appointments for Week of <span th:text="${#temporals.format(currentWeekStart, 'MMMM d, yyyy')}"></span></h2>
+    <div style="float: right;">
+      <a class="btn btn-outline-primary" th:href="@{/appointments(date=${previousWeek})}">
+        <i class="fa fa-chevron-left"></i> Previous Week
+      </a>
+      <a class="btn btn-outline-primary ms-2" th:href="@{/appointments(date=${nextWeek})}">
+        Next Week <i class="fa fa-chevron-right"></i>
+      </a>
+    </div>
+  </div>
+
+  <table id="appointmentsCalendar" class="table table-bordered table-striped mt-4">
+    <thead>
+      <tr>
+        <th style="width: 10%;" class="text-center">Time</th>
+        <th th:each="day : ${days}" style="width: 18%;" class="text-center">
+          <div th:text="${#temporals.format(day, 'EEEE')}"></div>
+          <div class="small text-muted" th:text="${#temporals.format(day, 'MMM d')}"></div>
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr th:each="time : ${times}">
+        <td class="align-middle fw-bold text-center" th:text="${#temporals.format(time, 'hh:mm a')}"></td>
+        
+        <td th:each="day : ${days}">
+          <th:block th:each="appt : ${calendarData.get(time).get(day)}">
+            <div style="padding: 10px; margin-bottom: 5px; border: 1px solid #ddd; background-color: #fff; border-radius: 4px;">
+                <a th:href="@{|/owners/${appt.pet.owner.id}/pets/${appt.pet.id}/appointments/${appt.id}/edit|}" 
+                   style="font-weight: bold; text-decoration: none;"
+                   th:text="${appt.pet.name}"></a>
+                <div style="font-size: 0.85em; color: #666;">
+                    <strong>Owner:</strong> <span th:text="${appt.pet.owner.firstName + ' ' + appt.pet.owner.lastName}"></span><br>
+                    <strong>Vet:</strong> <span th:text="${appt.vet.firstName + ' ' + appt.vet.lastName}"></span>
+                </div>
+            </div>
+          </th:block>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+</body>
+</html>

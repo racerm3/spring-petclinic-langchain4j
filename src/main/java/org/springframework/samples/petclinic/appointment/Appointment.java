@@ -7,6 +7,9 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.samples.petclinic.model.BaseEntity;
 import org.springframework.samples.petclinic.vet.Vet;
 
+import org.springframework.samples.petclinic.owner.Pet;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
@@ -38,6 +41,11 @@ public class Appointment extends BaseEntity {
 	@NotNull
 	private Vet vet;
 
+	@JsonIgnore
+	@ManyToOne
+	@JoinColumn(name = "pet_id", insertable = false, updatable = false)
+	private Pet pet;
+
 	public LocalDate getAppointmentDate() {
 		return appointmentDate;
 	}
@@ -68,6 +76,10 @@ public class Appointment extends BaseEntity {
 
 	public void setVet(Vet vet) {
 		this.vet = vet;
+	}
+
+	public Pet getPet() {
+		return pet;
 	}
 
 }

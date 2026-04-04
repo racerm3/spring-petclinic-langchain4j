@@ -25,6 +25,15 @@ public interface AppointmentRepository extends Repository<Appointment, Integer> 
 	List<Appointment> findByVetIdAndAppointmentDate(Integer vetId, LocalDate appointmentDate);
 
 	/**
+	 * Find appointments within a specific date range.
+	 * @param startDate the start date
+	 * @param endDate the end date
+	 * @return a list of appointments
+	 */
+	@Transactional(readOnly = true)
+	List<Appointment> findByAppointmentDateBetween(LocalDate startDate, LocalDate endDate);
+
+	/**
 	 * Find an appointment by its id.
 	 * @param id the appointment id
 	 * @return an optional appointment

@@ -4,6 +4,8 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -47,8 +49,14 @@ class AppointmentController {
 	}
 
 	@ModelAttribute("appointment")
-	public Appointment loadPetWithAppointment(@PathVariable("ownerId") int ownerId, @PathVariable("petId") int petId,
+	public Appointment loadPetWithAppointment(@PathVariable(value = "ownerId", required = false) Integer ownerId,
+			@PathVariable(value = "petId", required = false) Integer petId,
 			@PathVariable(value = "appointmentId", required = false) Integer appointmentId, Map<String, Object> model) {
+
+		if (ownerId == null || petId == null) {
+			return new Appointment();
+		}
+
 		Optional<Owner> optionalOwner = owners.findById(ownerId);
 		Owner owner = optionalOwner.orElseThrow(() -> new IllegalArgumentException(
 				"Owner not found with id: " + ownerId + ". Please ensure the ID is correct "));
@@ -179,6 +187,49 @@ class AppointmentController {
 		}
 		redirectAttributes.addFlashAttribute("message", "Your appointment has been updated");
 		return "redirect:/owners/{ownerId}";
+	}
+
+	@GetMapping("/appointments")
+	public String showCalendar(@RequestParam(value = "date", required = false) LocalDate date,
+			Map<String, Object> model) {
+		if (date == null) {
+			date = LocalDate.now();
+		}
+
+		LocalDate monday = date.with(DayOfWeek.MONDAY);
+		LocalDate friday = date.with(DayOfWeek.FRIDAY);
+
+		List<Appointment> appointmentsThisWeek = appointments.findByAppointmentDateBetween(monday, friday);
+
+		List<LocalDate> days = List.of(monday, monday.plusDays(1), monday.plusDays(2), monday.plusDays(3), friday);
+		List<LocalTime> times = List.of(LocalTime.of(9, 0), LocalTime.of(10, 0), LocalTime.of(11, 0),
+				LocalTime.of(12, 0), LocalTime.of(13, 0), LocalTime.of(14, 0), LocalTime.of(15, 0),
+				LocalTime.of(16, 0));
+
+		Map<LocalTime, Map<LocalDate, List<Appointment>>> calendarData = new LinkedHashMap<>();
+		for (LocalTime time : times) {
+			Map<LocalDate, List<Appointment>> dayMap = new HashMap<>();
+			for (LocalDate day : days) {
+				dayMap.put(day, new ArrayList<>());
+			}
+			calendarData.put(time, dayMap);
+		}
+
+		for (Appointment appt : appointmentsThisWeek) {
+			if (calendarData.containsKey(appt.getAppointmentTime())
+					&& calendarData.get(appt.getAppointmentTime()).containsKey(appt.getAppointmentDate())) {
+				calendarData.get(appt.getAppointmentTime()).get(appt.getAppointmentDate()).add(appt);
+			}
+		}
+
+		model.put("days", days);
+		model.put("times", times);
+		model.put("calendarData", calendarData);
+		model.put("currentWeekStart", monday);
+		model.put("previousWeek", monday.minusWeeks(1));
+		model.put("nextWeek", monday.plusWeeks(1));
+
+		return "appointments/appointmentsList";
 	}
 
 	private void populateAvailableSlots(Appointment appointment, Map<String, Object> model) {
