@@ -11,7 +11,11 @@ import org.springframework.samples.petclinic.owner.Pet;
 import org.springframework.samples.petclinic.owner.PetRepository;
 import org.springframework.samples.petclinic.vet.Vet;
 import org.springframework.samples.petclinic.vet.VetRepository;
+import org.springframework.samples.petclinic.appointment.Appointment;
+import org.springframework.samples.petclinic.appointment.AppointmentRepository;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 /**
  * Loads clinic data into an Embedding Store for the purpose of RAG functionality.
@@ -30,12 +34,15 @@ public class EmbeddingStoreInit {
 
 	private final PetRepository petRepository;
 
+	private final AppointmentRepository appointmentRepository;
+
 	public EmbeddingStoreInit(RagEmbeddingService ragEmbeddingService, VetRepository vetRepository,
-			OwnerRepository ownerRepository, PetRepository petRepository) {
+			OwnerRepository ownerRepository, PetRepository petRepository, AppointmentRepository appointmentRepository) {
 		this.ragEmbeddingService = ragEmbeddingService;
 		this.vetRepository = vetRepository;
 		this.ownerRepository = ownerRepository;
 		this.petRepository = petRepository;
+		this.appointmentRepository = appointmentRepository;
 	}
 
 	@EventListener
@@ -45,10 +52,12 @@ public class EmbeddingStoreInit {
 
 		Page<Owner> ownersPage = ownerRepository.findAll(pageable);
 		Page<Pet> petsPage = petRepository.findAll(pageable);
+		List<Appointment> appointments = appointmentRepository.findAll();
 
 		ragEmbeddingService.ingestVets(vetsPage.getContent());
 		ragEmbeddingService.ingestOwners(ownersPage.getContent());
 		ragEmbeddingService.ingestPets(petsPage.getContent());
+		ragEmbeddingService.ingestAppointments(appointments);
 	}
 
 }

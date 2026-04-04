@@ -25,6 +25,13 @@ public interface AppointmentRepository extends Repository<Appointment, Integer> 
 	List<Appointment> findByVetIdAndAppointmentDate(Integer vetId, LocalDate appointmentDate);
 
 	/**
+	 * Find all appointments.
+	 * @return a list of appointments
+	 */
+	@Transactional(readOnly = true)
+	List<Appointment> findAll();
+
+	/**
 	 * Find appointments within a specific date range.
 	 * @param startDate the start date
 	 * @param endDate the end date
@@ -32,6 +39,30 @@ public interface AppointmentRepository extends Repository<Appointment, Integer> 
 	 */
 	@Transactional(readOnly = true)
 	List<Appointment> findByAppointmentDateBetween(LocalDate startDate, LocalDate endDate);
+
+	/**
+	 * Find appointments by pet name.
+	 * @param name the pet name
+	 * @return a list of appointments
+	 */
+	@Transactional(readOnly = true)
+	List<Appointment> findByPet_NameIgnoreCaseOrderByAppointmentDateAscAppointmentTimeAsc(String name);
+
+	/**
+	 * Find appointments by owner last name.
+	 * @param lastName the owner last name
+	 * @return a list of appointments
+	 */
+	@Transactional(readOnly = true)
+	List<Appointment> findByPet_Owner_LastNameIgnoreCaseOrderByAppointmentDateAscAppointmentTimeAsc(String lastName);
+
+	/**
+	 * Find appointments by vet last name.
+	 * @param lastName the vet last name
+	 * @return a list of appointments
+	 */
+	@Transactional(readOnly = true)
+	List<Appointment> findByVet_LastNameIgnoreCaseOrderByAppointmentDateAscAppointmentTimeAsc(String lastName);
 
 	/**
 	 * Find an appointment by its id.

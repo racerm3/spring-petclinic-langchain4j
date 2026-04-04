@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.samples.petclinic.owner.Owner;
 import org.springframework.samples.petclinic.owner.Pet;
 import org.springframework.samples.petclinic.vet.Vet;
+import org.springframework.samples.petclinic.appointment.Appointment;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -48,6 +49,10 @@ public class RagEmbeddingService {
 
 	public void ingestPets(List<Pet> pets) {
 		ingestList(pets, "pets");
+	}
+
+	public void ingestAppointments(List<Appointment> appointments) {
+		ingestList(appointments, "appointments");
 	}
 
 	private void ingestList(List<?> entities, String entityType) {

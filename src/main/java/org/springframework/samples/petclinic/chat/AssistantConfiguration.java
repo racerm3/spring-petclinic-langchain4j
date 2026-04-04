@@ -42,9 +42,9 @@ class AssistantConfiguration {
 	}
 
 	@Bean
-	RetrievalAugmentor retrievalAugmentor(ChatModel chatModel, ContentRetriever vetContentRetriever) {
+	RetrievalAugmentor retrievalAugmentor(ChatModel chatModel, ContentRetriever contentRetriever) {
 		return DefaultRetrievalAugmentor.builder()
-			.queryRouter(new VetQueryRouter(chatModel, vetContentRetriever))
+			.queryRouter(new ClinicQueryRouter(chatModel, contentRetriever))
 			.build();
 	}
 

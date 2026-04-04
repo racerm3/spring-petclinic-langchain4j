@@ -15,6 +15,7 @@ import org.springframework.samples.petclinic.owner.OwnerRepository;
 import org.springframework.samples.petclinic.owner.Pet;
 import org.springframework.samples.petclinic.vet.Vet;
 import org.springframework.samples.petclinic.vet.VetRepository;
+import org.springframework.samples.petclinic.chat.RagEmbeddingService;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
@@ -37,10 +38,14 @@ class AppointmentController {
 
 	private final AppointmentRepository appointments;
 
-	public AppointmentController(OwnerRepository owners, VetRepository vets, AppointmentRepository appointments) {
+	private final RagEmbeddingService ragEmbeddingService;
+
+	public AppointmentController(OwnerRepository owners, VetRepository vets, AppointmentRepository appointments,
+			RagEmbeddingService ragEmbeddingService) {
 		this.owners = owners;
 		this.vets = vets;
 		this.appointments = appointments;
+		this.ragEmbeddingService = ragEmbeddingService;
 	}
 
 	@InitBinder
@@ -77,6 +82,7 @@ class AppointmentController {
 			appointment = new Appointment();
 			pet.addAppointment(appointment);
 		}
+		appointment.setPet(pet);
 		return appointment;
 	}
 
@@ -133,6 +139,7 @@ class AppointmentController {
 
 		if (owner != null) {
 			this.owners.save(owner);
+			this.ragEmbeddingService.ingestAppointments(java.util.List.of(appointment));
 		}
 		redirectAttributes.addFlashAttribute("message", "Your appointment has been booked");
 		return "redirect:/owners/{ownerId}";
@@ -184,6 +191,7 @@ class AppointmentController {
 
 		if (appointment != null) {
 			this.appointments.save(appointment);
+			this.ragEmbeddingService.ingestAppointments(java.util.List.of(appointment));
 		}
 		redirectAttributes.addFlashAttribute("message", "Your appointment has been updated");
 		return "redirect:/owners/{ownerId}";

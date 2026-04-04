@@ -4,6 +4,7 @@ import dev.langchain4j.service.MemoryId;
 import dev.langchain4j.service.SystemMessage;
 import dev.langchain4j.service.TokenStream;
 import dev.langchain4j.service.UserMessage;
+import dev.langchain4j.service.V;
 import dev.langchain4j.service.spring.AiService;
 
 import java.util.UUID;
@@ -12,6 +13,6 @@ import java.util.UUID;
 interface Assistant {
 
 	@SystemMessage(fromResource = "/prompts/system.st")
-	TokenStream chat(@MemoryId UUID memoryId, @UserMessage String userMessage);
+	TokenStream chat(@MemoryId UUID memoryId, @UserMessage String userMessage, @V("current_date") String currentDate);
 
 }

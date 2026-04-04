@@ -10,6 +10,10 @@ import org.springframework.samples.petclinic.owner.OwnerRepository;
 import org.springframework.samples.petclinic.owner.Pet;
 import org.springframework.samples.petclinic.owner.PetRepository;
 import org.springframework.samples.petclinic.owner.PetType;
+import org.springframework.samples.petclinic.vet.Vet;
+import org.springframework.samples.petclinic.vet.VetRepository;
+import org.springframework.samples.petclinic.appointment.Appointment;
+import org.springframework.samples.petclinic.appointment.AppointmentRepository;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 
@@ -30,9 +34,16 @@ public class AssistantTool {
 
 	private final PetRepository petRepository;
 
-	public AssistantTool(OwnerRepository ownerRepository, PetRepository petRepository) {
+	private final AppointmentRepository appointmentRepository;
+
+	private final VetRepository vetRepository;
+
+	public AssistantTool(OwnerRepository ownerRepository, PetRepository petRepository,
+			AppointmentRepository appointmentRepository, VetRepository vetRepository) {
 		this.ownerRepository = ownerRepository;
 		this.petRepository = petRepository;
+		this.appointmentRepository = appointmentRepository;
+		this.vetRepository = vetRepository;
 	}
 
 	/**
@@ -105,6 +116,37 @@ public class AssistantTool {
 		owner.setCity(city);
 		owner.setTelephone(telephone);
 		return ownerRepository.save(owner);
+	}
+
+	@Tool("List all appointments between a specific start date and end date (inclusive)")
+	public List<Appointment> getAppointmentsBetween(
+			@P("the start date of the range in yyyy-MM-dd format") @NonNull String startDate,
+			@P("the end date of the range in yyyy-MM-dd format") @NonNull String endDate) {
+		return appointmentRepository.findByAppointmentDateBetween(LocalDate.parse(startDate), LocalDate.parse(endDate));
+	}
+
+	@Tool("List all appointments for a pet with a specific name, sorted by date")
+	public List<Appointment> getAppointmentsByPetName(@P("the name of the pet") @NonNull String petName) {
+		return appointmentRepository.findByPet_NameIgnoreCaseOrderByAppointmentDateAscAppointmentTimeAsc(petName);
+	}
+
+	@Tool("List all appointments for an owner with a specific last name, sorted by date")
+	public List<Appointment> getAppointmentsByOwnerName(
+			@P("the last name of the owner") @NonNull String ownerLastName) {
+		return appointmentRepository
+			.findByPet_Owner_LastNameIgnoreCaseOrderByAppointmentDateAscAppointmentTimeAsc(ownerLastName);
+	}
+
+	@Tool("List all appointments for a veterinarian with a specific last name, sorted by date")
+	public List<Appointment> getAppointmentsByVetName(@P("the last name of the vet") @NonNull String vetLastName) {
+		return appointmentRepository
+			.findByVet_LastNameIgnoreCaseOrderByAppointmentDateAscAppointmentTimeAsc(vetLastName);
+	}
+
+	@Tool("List all veterinarians that the pet clinic has: vetId, name, specialties")
+	@NonNull
+	public List<Vet> getAllVets() {
+		return vetRepository.findAll();
 	}
 
 }

@@ -10,6 +10,7 @@ import org.springframework.samples.petclinic.vet.Vet;
 import org.springframework.samples.petclinic.owner.Pet;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
@@ -80,6 +81,23 @@ public class Appointment extends BaseEntity {
 
 	public Pet getPet() {
 		return pet;
+	}
+
+	public void setPet(Pet pet) {
+		this.pet = pet;
+	}
+
+	@JsonProperty("petName")
+	public String getPetName() {
+		return pet != null ? pet.getName() : null;
+	}
+
+	@JsonProperty("ownerName")
+	public String getOwnerFullName() {
+		if (pet != null && pet.getOwner() != null) {
+			return pet.getOwner().getFirstName() + " " + pet.getOwner().getLastName();
+		}
+		return null;
 	}
 
 }
