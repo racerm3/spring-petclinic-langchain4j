@@ -53,6 +53,32 @@
             <dt class="col-sm-2 text-secondary">Type</dt>
             <dd class="col-sm-10" th:text="${pet.type}"></dd>
           </dl>
+          <h4 class="h6 text-secondary mb-2 mt-3">Appointments</h4>
+          <table class="table table-sm table-striped mb-2">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Time</th>
+                <th>Veterinarian</th>
+                <th>Description</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr th:each="appt : ${pet.appointments}">
+                <td th:text="${#temporals.format(appt.appointmentDate, 'yyyy-MM-dd')}"></td>
+                <td th:text="${#temporals.format(appt.appointmentTime, 'HH:mm')}"></td>
+                <td th:text="${appt.vet.firstName + ' ' + appt.vet.lastName}"></td>
+                <td th:text="${appt?.description}"></td>
+                <td><a th:href="@{__${owner.id}__/pets/__${pet.id}__/appointments/__${appt.id}__/edit}">Edit</a></td>
+              </tr>
+              <tr th:if="${#lists.isEmpty(pet.appointments)}">
+                <td colspan="5" class="text-secondary">No appointments scheduled.</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h4 class="h6 text-secondary mb-2 mt-3">Visits</h4>
           <table class="table table-sm table-striped mb-2">
             <thead>
               <tr>
@@ -65,10 +91,14 @@
                 <td th:text="${#temporals.format(visit.date, 'yyyy-MM-dd')}"></td>
                 <td th:text="${visit?.description}"></td>
               </tr>
+              <tr th:if="${#lists.isEmpty(pet.visits)}">
+                <td colspan="2" class="text-secondary">No visits recorded.</td>
+              </tr>
             </tbody>
           </table>
-          <div>
+          <div class="mt-2">
             <a th:href="@{__${owner.id}__/pets/__${pet.id}__/edit}" class="btn btn-primary me-2">Edit Pet</a>
+            <a th:href="@{__${owner.id}__/pets/__${pet.id}__/appointments/new}" class="btn btn-primary me-2">Book Appointment</a>
             <a th:href="@{__${owner.id}__/pets/__${pet.id}__/visits/new}" class="btn btn-primary">Add Visit</a>
           </div>
         </div>

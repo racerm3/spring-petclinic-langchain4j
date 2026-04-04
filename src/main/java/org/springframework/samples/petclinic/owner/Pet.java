@@ -23,6 +23,7 @@ import java.util.Set;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.samples.petclinic.model.NamedEntity;
+import org.springframework.samples.petclinic.appointment.Appointment;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -61,6 +62,11 @@ public class Pet extends NamedEntity {
 	@OrderBy("date ASC")
 	private final Set<Visit> visits = new LinkedHashSet<>();
 
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@JoinColumn(name = "pet_id")
+	@OrderBy("appointmentDate ASC, appointmentTime ASC")
+	private final Set<Appointment> appointments = new LinkedHashSet<>();
+
 	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "owner_id")
@@ -88,6 +94,25 @@ public class Pet extends NamedEntity {
 
 	public void addVisit(Visit visit) {
 		getVisits().add(visit);
+	}
+
+	public Collection<Appointment> getAppointments() {
+		return this.appointments;
+	}
+
+	public void addAppointment(Appointment appointment) {
+		getAppointments().add(appointment);
+	}
+
+	public Appointment getAppointment(Integer id) {
+		for (Appointment appointment : getAppointments()) {
+			if (!appointment.isNew()) {
+				if (appointment.getId().equals(id)) {
+					return appointment;
+				}
+			}
+		}
+		return null;
 	}
 
 	public Owner getOwner() {
