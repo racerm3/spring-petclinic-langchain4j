@@ -15,6 +15,7 @@
  */
 package org.springframework.samples.petclinic.owner;
 
+import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -37,5 +38,29 @@ public interface PetRepository extends JpaRepository<Pet, Integer> {
 	 * found)
 	 */
 	Page<Pet> findByNameStartingWithIgnoreCase(String name, Pageable pageable);
+
+	/**
+	 * Retrieve {@link Pet}s from the data store by name, ignoring case.
+	 * @param name substring to search for
+	 * @param pageable pageable information
+	 * @return a Page of matching {@link Pet}s
+	 */
+	Page<Pet> findByNameContainingIgnoreCase(String name, Pageable pageable);
+
+	/**
+	 * Retrieve {@link Pet}s from the data store by name and owner, ignoring case.
+	 * @param name substring to search for
+	 * @param ownerId the ID of the owner to filter by
+	 * @param pageable pageable information
+	 * @return a Page of matching {@link Pet}s
+	 */
+	Page<Pet> findByNameContainingIgnoreCaseAndOwner_Id(String name, Integer ownerId, Pageable pageable);
+
+	/**
+	 * Retrieve all {@link Pet}s from the data store for a specific owner.
+	 * @param ownerId the ID of the owner
+	 * @return a List of matching {@link Pet}s
+	 */
+	List<Pet> findByOwner_Id(Integer ownerId);
 
 }

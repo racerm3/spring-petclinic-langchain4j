@@ -53,6 +53,16 @@ public interface OwnerRepository extends JpaRepository<Owner, Integer> {
 	 * @return a Collection of matching {@link Owner}s (or an empty Collection if none
 	 * found)
 	 */
+	/**
+	 * Retrieve {@link Owner}s from the data store by first or last name, ignoring case.
+	 * @param firstName prefix to search for first name
+	 * @param lastName prefix to search for last name
+	 * @return a Collection of matching {@link Owner}s
+	 */
+	@Query("SELECT owner FROM Owner owner WHERE LOWER(owner.firstName) LIKE LOWER(CONCAT('%', :query, '%')) OR LOWER(owner.lastName) LIKE LOWER(CONCAT('%', :query, '%'))")
+	Page<Owner> findByFirstNameOrLastName(@org.springframework.data.repository.query.Param("query") String query,
+			Pageable pageable);
+
 	Page<Owner> findByLastNameStartingWith(String lastName, Pageable pageable);
 
 	/**

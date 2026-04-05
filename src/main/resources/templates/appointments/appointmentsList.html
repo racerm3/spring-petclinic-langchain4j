@@ -28,17 +28,24 @@
       <tr th:each="time : ${times}">
         <td class="align-middle fw-bold text-center" th:text="${#temporals.format(time, 'hh:mm a')}"></td>
         
-        <td th:each="day : ${days}">
-          <th:block th:each="appt : ${calendarData.get(time).get(day)}">
-            <div style="padding: 10px; margin-bottom: 5px; border: 1px solid #ddd; background-color: #fff; border-radius: 4px;">
-                <a th:href="@{|/owners/${appt.pet.owner.id}/pets/${appt.pet.id}/appointments/${appt.id}/edit|}" 
-                   style="font-weight: bold; text-decoration: none;"
-                   th:text="${appt.pet.name}"></a>
-                <div style="font-size: 0.85em; color: #666;">
-                    <strong>Owner:</strong> <span th:text="${appt.pet.owner.firstName + ' ' + appt.pet.owner.lastName}"></span><br>
-                    <strong>Vet:</strong> <span th:text="${appt.vet.firstName + ' ' + appt.vet.lastName}"></span>
-                </div>
-            </div>
+        <td th:each="day : ${days}" class="text-center align-middle">
+          <th:block th:if="${not #lists.isEmpty(calendarData.get(time).get(day))}">
+            <th:block th:each="appt : ${calendarData.get(time).get(day)}">
+              <div style="padding: 10px; margin-bottom: 5px; border: 1px solid #ddd; background-color: #fff; border-radius: 4px; text-align: left;">
+                  <a th:href="@{|/owners/${appt.pet.owner.id}/pets/${appt.pet.id}/appointments/${appt.id}/edit|}" 
+                     style="font-weight: bold; text-decoration: none;"
+                     th:text="${appt.pet.name}"></a>
+                  <div style="font-size: 0.85em; color: #666;">
+                      <strong>Owner:</strong> <span th:text="${appt.pet.owner.firstName + ' ' + appt.pet.owner.lastName}"></span><br>
+                      <strong>Vet:</strong> <span th:text="${appt.vet.firstName + ' ' + appt.vet.lastName}"></span>
+                  </div>
+              </div>
+            </th:block>
+          </th:block>
+          <th:block th:if="${#lists.isEmpty(calendarData.get(time).get(day))}">
+            <a th:href="@{/appointments/new(date=${day}, time=${time})}" class="btn btn-sm btn-outline-success" title="Book Appointment">
+                <i class="fa fa-plus"></i>
+            </a>
           </th:block>
         </td>
       </tr>

@@ -60,6 +60,16 @@ public interface VetRepository extends JpaRepository<Vet, Integer> {
 	<S extends Vet> S save(@NonNull S vet);
 
 	/**
+	 * Retrieve veterinarians from the data store by first or last name, ignoring case.
+	 * @param query search term
+	 * @param pageable pagination info
+	 * @return a Page of matching veterinarians
+	 */
+	@Query("SELECT v FROM Vet v WHERE LOWER(v.firstName) LIKE LOWER(CONCAT('%', :query, '%')) OR LOWER(v.lastName) LIKE LOWER(CONCAT('%', :query, '%'))")
+	Page<Vet> findByFirstNameOrLastName(@org.springframework.data.repository.query.Param("query") String query,
+			Pageable pageable);
+
+	/**
 	 * Count the number of <code>Vet</code>s in the data store.
 	 */
 	@Transactional(readOnly = true)

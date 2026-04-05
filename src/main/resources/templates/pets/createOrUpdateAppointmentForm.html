@@ -77,13 +77,43 @@
           <input th:replace="~{fragments/inputField :: input ('Description', 'description', 'text')}" />
         </div>
 
-        <div class="form-group">
+        <div class="form-group row mt-4">
           <div class="offset-sm-2 col-sm-10">
-            <button class="btn btn-primary" type="submit">Book Appointment</button>
-            <a class="btn btn-primary ms-2" th:href="@{/owners/__${owner.id}__}">Cancel</a>
+            <div class="d-flex align-items-center gap-2 m-0 p-0">
+              <button class="btn btn-primary" type="submit">Book Appointment</button>
+              <a class="btn btn-primary" th:href="@{/owners/{id}(id=${owner.id})}">Cancel</a>
+              <button th:if="${!appointment['new']}" 
+                      type="button" 
+                      id="delete-appointment-btn"
+                      class="btn btn-danger" 
+                      onclick="handleDelete()">
+                  Delete Appointment
+              </button>
+            </div>
           </div>
         </div>
       </form>
+
+      <!-- Separate form for deletion to avoid validation conflicts -->
+      <form th:if="${!appointment['new']}" 
+            id="deleteForm" 
+            th:action="@{/owners/{ownerId}/pets/{petId}/appointments/{appointmentId}/delete(ownerId=${owner.id}, petId=${pet.id}, appointmentId=${appointment.id})}" 
+            method="post" 
+            style="display:none;">
+      </form>
+
+      <script th:if="${!appointment['new']}">
+          function handleDelete() {
+              if (confirm('Are you sure you want to delete this appointment?')) {
+                  const form = document.getElementById('deleteForm');
+                  if (form) {
+                      form.submit();
+                  } else {
+                      console.error('Delete form not found!');
+                  }
+              }
+          }
+      </script>
     </div>
   </div>
 

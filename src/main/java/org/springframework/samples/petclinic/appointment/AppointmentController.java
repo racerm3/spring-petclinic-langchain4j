@@ -13,8 +13,10 @@ import java.util.Optional;
 import org.springframework.samples.petclinic.owner.Owner;
 import org.springframework.samples.petclinic.owner.OwnerRepository;
 import org.springframework.samples.petclinic.owner.Pet;
+import org.springframework.samples.petclinic.owner.PetRepository;
 import org.springframework.samples.petclinic.vet.Vet;
 import org.springframework.samples.petclinic.vet.VetRepository;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.samples.petclinic.chat.RagEmbeddingService;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -34,15 +36,18 @@ class AppointmentController {
 
 	private final OwnerRepository owners;
 
+	private final PetRepository pets;
+
 	private final VetRepository vets;
 
 	private final AppointmentRepository appointments;
 
 	private final RagEmbeddingService ragEmbeddingService;
 
-	public AppointmentController(OwnerRepository owners, VetRepository vets, AppointmentRepository appointments,
-			RagEmbeddingService ragEmbeddingService) {
+	public AppointmentController(OwnerRepository owners, PetRepository pets, VetRepository vets,
+			AppointmentRepository appointments, RagEmbeddingService ragEmbeddingService) {
 		this.owners = owners;
+		this.pets = pets;
 		this.vets = vets;
 		this.appointments = appointments;
 		this.ragEmbeddingService = ragEmbeddingService;
@@ -197,6 +202,23 @@ class AppointmentController {
 		return "redirect:/owners/{ownerId}";
 	}
 
+	@PostMapping("/owners/{ownerId}/pets/{petId}/appointments/{appointmentId}/delete")
+	@Transactional
+	public String processDeleteAppointmentForm(@PathVariable int ownerId, @PathVariable int petId,
+			@PathVariable int appointmentId, RedirectAttributes redirectAttributes) {
+		Optional<Appointment> optionalAppointment = this.appointments.findById(appointmentId);
+		if (optionalAppointment.isPresent()) {
+			Appointment appointment = optionalAppointment.get();
+			Pet pet = appointment.getPet();
+			if (pet != null) {
+				pet.getAppointments().remove(appointment);
+			}
+			this.appointments.delete(appointment);
+			redirectAttributes.addFlashAttribute("message", "Appointment successfully deleted.");
+		}
+		return "redirect:/appointments";
+	}
+
 	@GetMapping("/appointments")
 	public String showCalendar(@RequestParam(value = "date", required = false) LocalDate date,
 			Map<String, Object> model) {
@@ -238,6 +260,70 @@ class AppointmentController {
 		model.put("nextWeek", monday.plusWeeks(1));
 
 		return "appointments/appointmentsList";
+	}
+
+	@GetMapping("/appointments/new")
+	public String initNewAppointmentForm(@RequestParam(value = "date", required = false) LocalDate date,
+			@RequestParam(value = "time", required = false) LocalTime time, Map<String, Object> model) {
+
+		Appointment appointment = new Appointment();
+		if (date != null) {
+			appointment.setAppointmentDate(date);
+		}
+		if (time != null) {
+			appointment.setAppointmentTime(time);
+		}
+
+		model.put("appointment", appointment);
+		populateAvailableSlots(appointment, model);
+		return "appointments/createAppointmentForm";
+	}
+
+	@PostMapping("/appointments/new")
+	public String processNewAppointmentForm(@Valid Appointment appointment, BindingResult result,
+			@RequestParam("ownerId") Integer ownerId, @RequestParam("petId") Integer petId,
+			@RequestParam("vetId") Integer vetId, Map<String, Object> model, RedirectAttributes redirectAttributes) {
+
+		if (ownerId == null || petId == null || vetId == null) {
+			result.reject("error.missingFields", "Please select an owner, pet and veterinarian.");
+			populateAvailableSlots(appointment, model);
+			return "appointments/createAppointmentForm";
+		}
+
+		// Load and link entities BEFORE checking for errors to satisfy validation
+		Optional<Pet> pet = pets.findById(petId);
+		Optional<Vet> vet = vets.findById(vetId);
+
+		if (!pet.isPresent() || !vet.isPresent()) {
+			result.reject("error.invalidEntities", "Invalid pet or veterinarian selected.");
+		}
+		else {
+			appointment.setPet(pet.get());
+			appointment.setVet(vet.get());
+		}
+
+		if (result.hasErrors()) {
+			populateAvailableSlots(appointment, model);
+			return "appointments/createAppointmentForm";
+		}
+
+		// Conflict check
+		List<Appointment> existing = appointments.findByVetIdAndAppointmentDate(vetId,
+				appointment.getAppointmentDate());
+		boolean isBooked = existing.stream()
+			.anyMatch(a -> a.getAppointmentTime().equals(appointment.getAppointmentTime()));
+		if (isBooked) {
+			result.rejectValue("appointmentTime", "duplicate",
+					"This time slot is already booked for the selected vet.");
+			populateAvailableSlots(appointment, model);
+			return "appointments/createAppointmentForm";
+		}
+
+		this.appointments.save(appointment);
+		this.ragEmbeddingService.ingestAppointments(java.util.List.of(appointment));
+
+		redirectAttributes.addFlashAttribute("message", "Appointment successfully booked.");
+		return "redirect:/appointments";
 	}
 
 	private void populateAvailableSlots(Appointment appointment, Map<String, Object> model) {

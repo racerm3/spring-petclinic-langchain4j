@@ -39,12 +39,11 @@ public class Appointment extends BaseEntity {
 
 	@ManyToOne
 	@JoinColumn(name = "vet_id")
-	@NotNull
 	private Vet vet;
 
 	@JsonIgnore
 	@ManyToOne
-	@JoinColumn(name = "pet_id", insertable = false, updatable = false)
+	@JoinColumn(name = "pet_id")
 	private Pet pet;
 
 	public LocalDate getAppointmentDate() {
