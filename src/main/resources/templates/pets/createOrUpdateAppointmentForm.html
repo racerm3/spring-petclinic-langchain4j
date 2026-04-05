@@ -79,16 +79,10 @@
 
         <div class="form-group row mt-4">
           <div class="offset-sm-2 col-sm-10">
-            <div class="d-flex align-items-center gap-2 m-0 p-0">
+            <div class="d-flex align-items-stretch gap-2 m-0 p-0">
               <button class="btn btn-primary" type="submit">Book Appointment</button>
               <a class="btn btn-primary" th:href="@{/owners/{id}(id=${owner.id})}">Cancel</a>
-              <button th:if="${!appointment['new']}" 
-                      type="button" 
-                      id="delete-appointment-btn"
-                      class="btn btn-danger" 
-                      onclick="handleDelete()">
-                  Delete Appointment
-              </button>
+              <button class="btn btn-primary" th:if="${!appointment['new']}" type="button" id="delete-appointment-btn" onclick="handleDelete()">Delete Appointment</button>
             </div>
           </div>
         </div>

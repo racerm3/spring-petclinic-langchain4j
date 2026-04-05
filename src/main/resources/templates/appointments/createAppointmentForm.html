@@ -4,62 +4,69 @@
 
 <h2>New Appointment</h2>
 
-<form th:object="${appointment}" class="form-horizontal" method="post">
+<form th:object="${appointment}" id="appointment-form" class="form-horizontal" method="post" novalidate>
     <div class="form-group has-feedback">
-        <label class="col-sm-2 control-label">Date</label>
+        <label class="col-sm-2 control-label">Date <span class="text-danger">*</span></label>
         <div class="col-sm-10">
-            <input type="date" th:field="*{appointmentDate}" class="form-control" />
+            <input type="date" th:field="*{appointmentDate}" class="form-control" required />
             <span class="help-inline" th:if="${#fields.hasErrors('appointmentDate')}" th:errors="*{appointmentDate}"></span>
+            <span class="help-inline validation-error" id="error-date" style="display:none">Date is required.</span>
         </div>
     </div>
     <div class="form-group has-feedback">
-        <label class="col-sm-2 control-label">Time</label>
+        <label class="col-sm-2 control-label">Time <span class="text-danger">*</span></label>
         <div class="col-sm-10">
-            <select th:field="*{appointmentTime}" class="form-control">
+            <select th:field="*{appointmentTime}" class="form-control" required>
+                <option value="">-- Select a time --</option>
                 <option th:each="slot : ${availableSlots}" th:value="${slot}" th:text="${#temporals.format(slot, 'hh:mm a')}"></option>
             </select>
             <span class="help-inline" th:if="${#fields.hasErrors('appointmentTime')}" th:errors="*{appointmentTime}"></span>
+            <span class="help-inline validation-error" id="error-time" style="display:none">Time is required.</span>
         </div>
     </div>
 
     <div class="form-group has-feedback">
-        <label class="col-sm-2 control-label">Owner</label>
+        <label class="col-sm-2 control-label">Owner <span class="text-danger">*</span></label>
         <div class="col-sm-10 pos-relative">
             <input type="text" id="owner-search" class="form-control" placeholder="Type owner name..." autocomplete="off"/>
             <input type="hidden" name="ownerId" id="owner-id" />
             <div id="owner-results" class="autocomplete-results"></div>
+            <span class="help-inline validation-error" id="error-owner" style="display:none">Please select an owner from the list.</span>
         </div>
     </div>
 
     <div class="form-group has-feedback">
-        <label class="col-sm-2 control-label">Pet</label>
+        <label class="col-sm-2 control-label">Pet <span class="text-danger">*</span></label>
         <div class="col-sm-10">
             <select name="petId" id="pet-id" class="form-control" disabled>
                 <option value="">Select an owner first...</option>
             </select>
+            <span class="help-inline validation-error" id="error-pet" style="display:none">Please select a pet.</span>
         </div>
     </div>
 
     <div class="form-group has-feedback">
-        <label class="col-sm-2 control-label">Veterinarian</label>
+        <label class="col-sm-2 control-label">Veterinarian <span class="text-danger">*</span></label>
         <div class="col-sm-10 pos-relative">
             <input type="text" id="vet-search" class="form-control" placeholder="Type vet name..." autocomplete="off"/>
             <input type="hidden" name="vetId" id="vet-id" />
             <div id="vet-results" class="autocomplete-results"></div>
+            <span class="help-inline validation-error" id="error-vet" style="display:none">Please select a veterinarian from the list.</span>
         </div>
     </div>
 
     <div class="form-group has-feedback">
-        <label class="col-sm-2 control-label">Description</label>
+        <label class="col-sm-2 control-label">Description <span class="text-danger">*</span></label>
         <div class="col-sm-10">
-            <textarea th:field="*{description}" class="form-control" rows="3"></textarea>
+            <textarea th:field="*{description}" class="form-control" rows="3" required></textarea>
             <span class="help-inline" th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></span>
+            <span class="help-inline validation-error" id="error-description" style="display:none">Description is required.</span>
         </div>
     </div>
 
     <div class="form-group row mt-4">
         <div class="col-sm-offset-2 col-sm-10 d-flex align-items-center gap-2">
-            <button class="btn btn-primary" type="submit">Book Appointment</button>
+            <button class="btn btn-primary" type="submit" id="book-btn">Book Appointment</button>
             <a class="btn btn-primary" th:href="@{/appointments}">Cancel</a>
         </div>
     </div>
@@ -86,6 +93,16 @@
     }
     .autocomplete-item:hover {
         background-color: #f0f0f0;
+    }
+    .validation-error {
+        color: #c0392b;
+        font-size: 0.875em;
+        margin-top: 4px;
+        display: block;
+    }
+    .form-control.field-invalid {
+        border-color: #c0392b;
+        box-shadow: 0 0 0 2px rgba(192,57,43,0.15);
     }
 </style>
 
@@ -168,6 +185,101 @@
     });
     
     setupAutocomplete('vet-search', 'vet-results', 'vet-id', '/api/search/vets');
+
+    // Clear hidden value if the user manually clears/changes the text input
+    document.getElementById('owner-search').addEventListener('input', () => {
+        if (!document.getElementById('owner-search').value.trim()) {
+            document.getElementById('owner-id').value = '';
+        }
+    });
+    document.getElementById('vet-search').addEventListener('input', () => {
+        if (!document.getElementById('vet-search').value.trim()) {
+            document.getElementById('vet-id').value = '';
+        }
+    });
+
+    function setFieldError(inputEl, errorEl, show) {
+        if (show) {
+            inputEl.classList.add('field-invalid');
+            errorEl.style.display = 'block';
+        } else {
+            inputEl.classList.remove('field-invalid');
+            errorEl.style.display = 'none';
+        }
+    }
+
+    document.getElementById('appointment-form').addEventListener('submit', function (e) {
+        let valid = true;
+
+        // Date
+        const dateInput = document.querySelector('input[name="appointmentDate"]');
+        const dateError = document.getElementById('error-date');
+        if (!dateInput || !dateInput.value.trim()) {
+            setFieldError(dateInput, dateError, true);
+            valid = false;
+        } else {
+            setFieldError(dateInput, dateError, false);
+        }
+
+        // Time
+        const timeSelect = document.querySelector('select[name="appointmentTime"]');
+        const timeError = document.getElementById('error-time');
+        if (!timeSelect || !timeSelect.value) {
+            setFieldError(timeSelect, timeError, true);
+            valid = false;
+        } else {
+            setFieldError(timeSelect, timeError, false);
+        }
+
+        // Owner (hidden field must be populated by autocomplete selection)
+        const ownerSearch = document.getElementById('owner-search');
+        const ownerId = document.getElementById('owner-id');
+        const ownerError = document.getElementById('error-owner');
+        if (!ownerId.value) {
+            setFieldError(ownerSearch, ownerError, true);
+            valid = false;
+        } else {
+            setFieldError(ownerSearch, ownerError, false);
+        }
+
+        // Pet
+        const petSelect = document.getElementById('pet-id');
+        const petError = document.getElementById('error-pet');
+        if (!petSelect.value) {
+            setFieldError(petSelect, petError, true);
+            valid = false;
+        } else {
+            setFieldError(petSelect, petError, false);
+        }
+
+        // Vet (hidden field must be populated by autocomplete selection)
+        const vetSearch = document.getElementById('vet-search');
+        const vetId = document.getElementById('vet-id');
+        const vetError = document.getElementById('error-vet');
+        if (!vetId.value) {
+            setFieldError(vetSearch, vetError, true);
+            valid = false;
+        } else {
+            setFieldError(vetSearch, vetError, false);
+        }
+
+        // Description
+        const descTextarea = document.querySelector('textarea[name="description"]');
+        const descError = document.getElementById('error-description');
+        if (!descTextarea || !descTextarea.value.trim()) {
+            setFieldError(descTextarea, descError, true);
+            valid = false;
+        } else {
+            setFieldError(descTextarea, descError, false);
+        }
+
+        if (!valid) {
+            e.preventDefault();
+            // Scroll to the first invalid field
+            const firstInvalid = document.querySelector('.field-invalid');
+            if (firstInvalid) firstInvalid.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+    });
 </script>
 
 </body>
