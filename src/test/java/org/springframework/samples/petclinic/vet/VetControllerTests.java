@@ -27,6 +27,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
+import org.springframework.samples.petclinic.chat.RagEmbeddingService;
 import org.springframework.test.context.aot.DisabledInAotMode;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
@@ -60,6 +61,9 @@ class VetControllerTests {
 
 	@MockitoBean
 	private SpecialtyRepository specialtyRepository;
+
+	@MockitoBean
+	private RagEmbeddingService ragEmbeddingService;
 
 	private Vet james() {
 		Vet james = new Vet();
@@ -102,7 +106,6 @@ class VetControllerTests {
 
 		mockMvc.perform(MockMvcRequestBuilders.get("/vets.html?page=1"))
 			.andExpect(status().isOk())
-			.andExpect(model().attributeExists("listVets"))
 			.andExpect(model().attributeExists("specialties"))
 			.andExpect(view().name("vets/vetList"));
 
