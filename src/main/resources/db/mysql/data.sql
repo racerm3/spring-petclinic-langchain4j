@@ -54,3 +54,8 @@ INSERT IGNORE INTO visits VALUES (4, 7, '2008-09-04', 'spayed');
 
 INSERT IGNORE INTO appointments VALUES (1, 7, 1, '2026-05-01', '10:00:00', 'annual checkup');
 INSERT IGNORE INTO appointments VALUES (2, 8, 2, '2026-05-02', '14:00:00', 'general consultation');
+
+INSERT IGNORE INTO logins (first_name, last_name, username, password, force_password_change) 
+SELECT MIN(first_name), MAX(last_name), CONCAT(LOWER(SUBSTRING(MIN(first_name), 1, 1)), LOWER(MAX(last_name))), 'p@ssw0rd', TRUE 
+FROM vets 
+GROUP BY CONCAT(LOWER(SUBSTRING(first_name, 1, 1)), LOWER(last_name));

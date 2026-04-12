@@ -561,3 +561,9 @@ INSERT INTO visits VALUES (default, 7, '2013-01-04', 'spayed');
 
 INSERT INTO appointments VALUES (default, 7, 1, '2026-05-01', '10:00:00', 'annual checkup');
 INSERT INTO appointments VALUES (default, 8, 2, '2026-05-02', '14:00:00', 'general consultation');
+
+INSERT INTO logins (first_name, last_name, username, password, force_password_change) 
+SELECT MIN(first_name), MAX(last_name), LOWER(SUBSTRING(MIN(first_name), 1, 1) || MAX(last_name)), 'p@ssw0rd', TRUE 
+FROM vets 
+GROUP BY LOWER(SUBSTRING(first_name, 1, 1) || last_name);
+

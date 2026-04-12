@@ -51,3 +51,8 @@ INSERT INTO visits VALUES (1, 7, '2013-01-01', 'rabies shot');
 INSERT INTO visits VALUES (2, 8, '2013-01-02', 'rabies shot');
 INSERT INTO visits VALUES (3, 8, '2013-01-03', 'neutered');
 INSERT INTO visits VALUES (4, 7, '2013-01-04', 'spayed');
+
+INSERT INTO logins (first_name, last_name, username, password, force_password_change) 
+SELECT MIN(first_name), MAX(last_name), LOWER(SUBSTRING(MIN(first_name) FROM 1 FOR 1) || MAX(last_name)), 'p@ssw0rd', TRUE 
+FROM vets 
+GROUP BY LOWER(SUBSTRING(first_name FROM 1 FOR 1) || last_name);

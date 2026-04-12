@@ -54,3 +54,9 @@ INSERT INTO visits (pet_id, visit_date, description) SELECT 7, '2008-09-04', 'sp
 
 INSERT INTO appointments (pet_id, vet_id, appointment_date, appointment_time, description) SELECT 7, 1, '2026-05-01', '10:00:00', 'annual checkup' WHERE NOT EXISTS (SELECT * FROM appointments WHERE id=1);
 INSERT INTO appointments (pet_id, vet_id, appointment_date, appointment_time, description) SELECT 8, 2, '2026-05-02', '14:00:00', 'general consultation' WHERE NOT EXISTS (SELECT * FROM appointments WHERE id=2);
+
+INSERT INTO logins (first_name, last_name, username, password, force_password_change) 
+SELECT MIN(first_name), MAX(last_name), LOWER(SUBSTRING(MIN(first_name) from 1 for 1) || MAX(last_name)), 'p@ssw0rd', TRUE 
+FROM vets 
+GROUP BY LOWER(SUBSTRING(first_name from 1 for 1) || last_name)
+ON CONFLICT (username) DO NOTHING;

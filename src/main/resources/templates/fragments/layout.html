@@ -76,6 +76,24 @@
           </li>
 
         </ul>
+
+        <ul class="nav navbar-nav ms-auto text-nowrap">
+          <li class="nav-item dropdown" th:if="${session.user != null}">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <span class="fa fa-user" aria-hidden="true"></span>
+              <span th:text="${session.user.username}">User</span>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+              <li><a class="dropdown-item" th:href="@{/logout}">Logout</a></li>
+            </ul>
+          </li>
+          <li class="nav-item" th:if="${session.user == null}">
+            <a class="nav-link" th:href="@{/login}">
+              <span class="fa fa-sign-in" aria-hidden="true"></span>
+              <span>Login</span>
+            </a>
+          </li>
+        </ul>
       </div>
     </div>
   </nav>
@@ -90,7 +108,7 @@
       </footer>
     </div>
   </div>
-  <div class="chatbox minimized" id="chatbox">
+  <div class="chatbox minimized" id="chatbox" th:unless="${menu == 'login'}">
     <div class="chatbox-header" onclick="toggleChatbox()">
       Chat with Us!
     </div>
@@ -117,8 +135,8 @@
   <script th:src="@{/webjars/marked/14.1.2/marked.min.js}"></script>
 
   <!-- JavaScript for handling chatbox interaction -->
-  <script th:src="@{/resources/js/chat.js}"></script>
-  <script>
+  <script th:src="@{/resources/js/chat.js}" th:unless="${menu == 'login'}"></script>
+  <script th:unless="${menu == 'login'}">
     // Call loadChatMessages when the page loads
     window.onload = loadChatMessages;
 

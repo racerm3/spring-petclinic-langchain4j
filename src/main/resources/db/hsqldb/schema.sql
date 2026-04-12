@@ -5,6 +5,7 @@ DROP TABLE visits IF EXISTS;
 DROP TABLE pets IF EXISTS;
 DROP TABLE types IF EXISTS;
 DROP TABLE owners IF EXISTS;
+DROP TABLE logins IF EXISTS;
 
 
 CREATE TABLE vets (
@@ -13,6 +14,16 @@ CREATE TABLE vets (
   last_name  VARCHAR(30)
 );
 CREATE INDEX vets_last_name ON vets (last_name);
+
+CREATE TABLE logins (
+  id         INTEGER IDENTITY PRIMARY KEY,
+  first_name VARCHAR(30),
+  last_name  VARCHAR(30),
+  username   VARCHAR(100) UNIQUE,
+  password   VARCHAR(255),
+  force_password_change BOOLEAN DEFAULT TRUE
+);
+CREATE INDEX logins_username ON logins (username);
 
 CREATE TABLE specialties (
   id   INTEGER IDENTITY PRIMARY KEY,
