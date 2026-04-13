@@ -1,6 +1,6 @@
-# GenAI Spring PetClinic Sample Application build with LangChain4j [![Build Status](https://github.com/spring-petclinic/spring-petclinic-langchain4j/actions/workflows/maven-build.yml/badge.svg)](https://github.com/spring-petclinic/spring-petclinic-langchain4j/actions/workflows/maven-build.yml)[![Build Status](https://github.com/spring-petclinic/spring-petclinic-langchain4j/actions/workflows/gradle-build.yml/badge.svg)](https://github.com/spring-petclinic/spring-petclinic-langchain4j/actions/workflows/gradle-build.yml)
+# GenAI Spring PetClinic Sample Application build with LangChain4j 
 
-[![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/spring-petclinic/spring-petclinic-langchain4j) [![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://github.com/codespaces/new?hide_repo_select=true&ref=main&repo=https://github.com/codespaces/new?hide_repo_select=true&ref=main&repo=875544168)
+[![Build Status](https://github.com/racerm3/spring-petclinic-langchain4j/actions/workflows/maven-build.yml/badge.svg)](https://github.com/racerm3/spring-petclinic-langchain4j/actions/workflows/maven-build.yml)
 
 ## Understanding the Spring Petclinic LangChain4j application
 
