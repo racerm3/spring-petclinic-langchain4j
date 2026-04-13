@@ -49,6 +49,7 @@ class CrashControllerIntegrationTests {
 
 	@SpringBootApplication(exclude = { DataSourceAutoConfiguration.class,
 			DataSourceTransactionManagerAutoConfiguration.class, HibernateJpaAutoConfiguration.class })
+	@org.springframework.context.annotation.Import(org.springframework.samples.petclinic.auth.AuthInterceptor.class)
 	static class TestConfiguration {
 
 	}

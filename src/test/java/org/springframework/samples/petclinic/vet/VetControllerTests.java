@@ -46,7 +46,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * Test class for the {@link VetController}
  */
 
-@WebMvcTest(VetController.class)
+@WebMvcTest(value = VetController.class,
+		excludeFilters = @org.springframework.context.annotation.ComponentScan.Filter(
+				value = org.springframework.samples.petclinic.system.WebMvcConfig.class,
+				type = org.springframework.context.annotation.FilterType.ASSIGNABLE_TYPE))
 @Import(SpecialtyFormatter.class)
 @DisabledInNativeImage
 @DisabledInAotMode

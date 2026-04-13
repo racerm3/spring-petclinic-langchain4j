@@ -56,7 +56,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * @author Colin But
  * @author Wick Dynex
  */
-@WebMvcTest(OwnerController.class)
+@WebMvcTest(value = OwnerController.class,
+		excludeFilters = @org.springframework.context.annotation.ComponentScan.Filter(
+				value = org.springframework.samples.petclinic.system.WebMvcConfig.class,
+				type = org.springframework.context.annotation.FilterType.ASSIGNABLE_TYPE))
 @DisabledInNativeImage
 @DisabledInAotMode
 @SuppressWarnings("null")

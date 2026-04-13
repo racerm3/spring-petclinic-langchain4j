@@ -40,7 +40,10 @@ import java.util.Optional;
  * @author Colin But
  * @author Wick Dynex
  */
-@WebMvcTest(VisitController.class)
+@WebMvcTest(value = VisitController.class,
+		excludeFilters = @org.springframework.context.annotation.ComponentScan.Filter(
+				value = org.springframework.samples.petclinic.system.WebMvcConfig.class,
+				type = org.springframework.context.annotation.FilterType.ASSIGNABLE_TYPE))
 @DisabledInNativeImage
 @DisabledInAotMode
 class VisitControllerTests {

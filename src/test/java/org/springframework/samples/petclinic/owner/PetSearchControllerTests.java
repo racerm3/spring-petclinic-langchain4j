@@ -39,7 +39,10 @@ import org.springframework.test.web.servlet.MockMvc;
 /**
  * Test class for the {@link PetSearchController}
  */
-@WebMvcTest(PetSearchController.class)
+@WebMvcTest(value = PetSearchController.class,
+		excludeFilters = @org.springframework.context.annotation.ComponentScan.Filter(
+				value = org.springframework.samples.petclinic.system.WebMvcConfig.class,
+				type = org.springframework.context.annotation.FilterType.ASSIGNABLE_TYPE))
 @SuppressWarnings("null")
 class PetSearchControllerTests {
 
