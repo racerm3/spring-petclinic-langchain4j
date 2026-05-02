@@ -1,0 +1,15 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        
+        {
+            "type": "java",
+            "name": "PetClinicApplication",
+            "request": "launch",
+            "mainClass": "org.springframework.samples.petclinic.PetClinicApplication",
+            "projectName": "spring-petclinic-langchain4j",
+            "vmArgs": "-Dspring.profiles.active=gemini",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}

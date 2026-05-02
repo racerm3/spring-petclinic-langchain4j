@@ -525,7 +525,9 @@
     <profile>
       <id>gemini</id>
       <activation>
-        <activeByDefault>true</activeByDefault>
+        <property>
+          <name>!skipGemini</name>
+        </property>
       </activation>
       <dependencies>
         <dependency>
