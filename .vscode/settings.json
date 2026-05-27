@@ -6,11 +6,6 @@
             "debug": false
         },
         {
-            "alias": "Gemini 2.5 Flash",
-            "command": "spring-boot:run -P gemini -Dspring-boot.run.jvmArguments=\"-DGEMINI_MODEL=gemini-2.5-flash\"",
-            "debug": false
-        },
-        {
             "alias": "Gemini 3.1 Flash Lite",
             "command": "spring-boot:run -P gemini -Dspring-boot.run.jvmArguments=\"-DGEMINI_MODEL=gemini-3.1-flash-lite\"",
             "debug": false
